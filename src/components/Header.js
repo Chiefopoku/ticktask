@@ -11,7 +11,9 @@ const Header = ({
 }) => {
   return (
     <header className="header">
-      <h1>TickTask</h1>
+      <div className="header-brand">
+        <h1>TickTask</h1>
+      </div>
       <nav>
         <ul className="navbar">
           {isAuthenticated ? (
@@ -28,10 +30,10 @@ const Header = ({
                 />
               </li>
               <li>
-                <Link to="/notifications">
+                <Link to="/notifications" className="notification-link">
                   <span className="notification-icon">🔔</span>
-                  <span className="badge">3</span>{" "}
-                  {/* Display notification count */}
+                  <span className="badge">3</span>
+                  {/* Notification count */}
                 </Link>
               </li>
               <li className="nav-item dropdown">

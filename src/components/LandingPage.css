@@ -1,0 +1,123 @@
+/* Navbar Styles */
+.navbar {
+  background-color: #6a9c89;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-brand {
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a,
+.nav-links button {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.login-btn {
+  padding: 10px 20px;
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #e04d4d;
+}
+
+.theme-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #c4dad2, #6a9c89);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.hero-section h2 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.hero-section p {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.cta-btn {
+  padding: 15px 30px;
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #e04d4d;
+}
+
+/* Features Section */
+.features-section {
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.features-section h3 {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.features-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features-section li {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #6a9c89;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}

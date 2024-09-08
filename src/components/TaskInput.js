@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./TaskInput.css";
+import "./TaskInput.css"; // Import the CSS file for styling
 
 const TaskInput = ({ addTask }) => {
   const [task, setTask] = useState("");
@@ -8,19 +8,22 @@ const TaskInput = ({ addTask }) => {
     e.preventDefault();
     if (task.trim()) {
       addTask(task);
-      setTask(""); // Clear the input after adding a task
+      setTask(""); // Clear the input field after adding the task
     }
   };
 
   return (
-    <form className="task-input" onSubmit={handleSubmit}>
+    <form className="task-input-container" onSubmit={handleSubmit}>
       <input
         type="text"
         value={task}
         onChange={(e) => setTask(e.target.value)}
-        placeholder="Add a new task..."
+        placeholder="Enter a new task..."
+        className="task-input-field"
       />
-      <button type="submit">Add Task</button>
+      <button type="submit" className="task-input-button">
+        Add Task
+      </button>
     </form>
   );
 };

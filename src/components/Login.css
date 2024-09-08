@@ -1,34 +1,74 @@
+/* Styles for the Login Page */
+
+/* Overall container for login page */
 .login-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a9c89, #c4dad2);
+}
+
+/* Login card styling */
+.login-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Login heading */
+.login-card h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Description text below the heading */
+.login-description {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Button styling */
+.login-button {
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #e9efec; /* Light background for login */
-}
-
-.login-container h1 {
-  font-size: 2.5rem;
-  color: #6a9c89; /* Muted green for text */
-  margin-bottom: 10px;
-}
-
-.login-container p {
-  font-size: 1.2rem;
-  color: #aab396; /* Primary greenish tone */
-  margin-bottom: 20px;
-}
-
-.login-container button {
-  padding: 10px 20px;
-  background-color: #6a9c89; /* Muted green button */
+  background-color: #4285f4;
   color: white;
   border: none;
+  padding: 12px 20px;
   border-radius: 4px;
-  font-size: 1.1rem;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.login-container button:hover {
-  background-color: #aab396; /* Darker hover effect */
+/* Add Google logo inside the button */
+.login-button .google-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* Button hover effect */
+.login-button:hover {
+  background-color: #357ae8;
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 20px;
+  }
+
+  .login-button {
+    width: 100%;
+  }
 }

@@ -1,52 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "./firebase"; // Import Firebase auth
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-} from "firebase/auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
-import Login from "./components/Login";
+import FeaturesPage from "./components/FeaturesPage";
+import AboutPage from "./components/AboutPage";
+import Login from "./components/Login"; // Import Login component
+import PrivateRoute from "./components/PrivateRoute";
+import { auth, GoogleAuthProvider, signInWithPopup } from "./firebase"; // Ensure GoogleAuthProvider and signInWithPopup are imported
 
 function App() {
-  // State to store the authenticated user
   const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState("light");
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State to manage login modal
 
-  // UseEffect hook to listen for changes in authentication state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        // If the user is authenticated, set the user state
         setUser(user);
       } else {
-        // If the user is not authenticated, set the user state to null
         setUser(null);
       }
     });
-
-    // Clean up the onAuthStateChanged listener when the component unmounts
     return () => unsubscribe();
   }, []);
 
-  // Function to handle Google Sign-In
   const handleLogin = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // Set the authenticated user
         setUser(result.user);
+        console.log("Login successful!", result.user);
+        setIsLoginModalOpen(false); // Close the modal after login
       })
       .catch((error) => {
         console.error("Error during login:", error);
       });
   };
 
-  // Function to handle user sign-out
   const handleLogout = () => {
-    signOut(auth)
+    auth
+      .signOut()
       .then(() => {
-        // Reset the user state to null after logout
         setUser(null);
       })
       .catch((error) => {
@@ -54,15 +48,50 @@ function App() {
       });
   };
 
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
   return (
-    <div>
-      {/* Render Dashboard if user is logged in, otherwise render Login */}
-      {user ? (
-        <Dashboard user={user} onLogout={handleLogout} />
-      ) : (
-        <Login onLogin={handleLogin} />
-      )}
-    </div>
+    <Router>
+      <div className={`app ${theme}`}>
+        {/* Content that may blur */}
+        <div className={`content ${isLoginModalOpen ? "blur" : ""}`}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <LandingPage
+                  isAuthenticated={!!user}
+                  onLogin={() => setIsLoginModalOpen(true)} // Trigger login modal
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                />
+              }
+            />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute user={user}>
+                  <Dashboard user={user} onLogout={handleLogout} />
+                </PrivateRoute>
+              }
+            />
+            <Route path="*" element={<LandingPage />} />
+          </Routes>
+        </div>
+
+        {/* Render the login modal */}
+        {isLoginModalOpen && (
+          <Login
+            onLogin={handleLogin}
+            onClose={() => setIsLoginModalOpen(false)}
+          />
+        )}
+      </div>
+    </Router>
   );
 }
 

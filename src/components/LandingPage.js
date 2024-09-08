@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./LandingPage.css";
+import "./LandingPage.css"; // Import the updated CSS
 
 const LandingPage = ({ isAuthenticated, onLogin, theme, toggleTheme }) => {
   return (
-    <div>
+    <div className="landing-page">
       {/* Navbar */}
       <header className="navbar">
         <div className="navbar-container">
@@ -44,29 +44,41 @@ const LandingPage = ({ isAuthenticated, onLogin, theme, toggleTheme }) => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h2>Organize your tasks with TickTask</h2>
+          <h2>Stay Organized with TickTask</h2>
           <p>
-            TickTask helps you manage your time and tasks efficiently. Stay on
-            top of your to-do list and get more done.
+            Manage your tasks effectively and boost your productivity with
+            TickTask. Track your tasks, set reminders, and reach your goals.
           </p>
           {!isAuthenticated && (
             <button className="cta-btn" onClick={onLogin}>
               Get Started
-            </button>
+            </button> // Use onLogin to open modal
           )}
         </div>
       </section>
 
-      {/* Additional Sections */}
+      {/* Features Section */}
       <section className="features-section">
-        <h3>Why Choose TickTask?</h3>
-        <ul>
-          <li>Manage tasks easily with an intuitive interface.</li>
-          <li>Get reminders and notifications.</li>
-          <li>Access your tasks from anywhere.</li>
-        </ul>
+        <div className="features-content">
+          <h3>Why Choose TickTask?</h3>
+          <div className="feature-items">
+            <div className="feature-item">
+              <h4>Easy Task Management</h4>
+              <p>Manage and track your tasks with a user-friendly interface.</p>
+            </div>
+            <div className="feature-item">
+              <h4>Set Reminders</h4>
+              <p>Never miss a deadline by setting up task reminders.</p>
+            </div>
+            <div className="feature-item">
+              <h4>Access Anywhere</h4>
+              <p>Access your tasks from any device, anywhere.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
         <p>&copy; 2024 TickTask. All rights reserved.</p>
       </footer>

@@ -1,33 +1,33 @@
 {
   "name": "ticktask",
   "version": "1.0.0",
-  "description": "TickTask is a task manager app with Google OAuth login and integration with Firebase backend.",
-  "homepage": "https://Chiefopoku.github.io/ticktask",
+  "description": "TickTask is a task manager app with Google OAuth login and integration with a Django backend.",
   "main": "src/index.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "keywords": [
     "react",
     "task-manager",
     "oauth2",
-    "firebase",
+    "django",
     "google-login"
   ],
-  "author": "Emmanuel Opoku-Adjei",
+  "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^0.21.4",
     "firebase": "^10.13.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.26.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
   },
   "browserslist": {
     "production": [
@@ -40,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^6.1.1"
   }
 }

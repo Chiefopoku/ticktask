@@ -13,7 +13,6 @@
     "react",
     "task-manager",
     "oauth2",
-    "django",
     "google-login"
   ],
   "author": "Your Name",

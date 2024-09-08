@@ -1,85 +1,74 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase"; // Import Firestore
+import {
+  collection,
+  addDoc,
+  query,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import TaskInput from "./TaskInput";
 import TaskList from "./TaskList";
-import "./Dashboard.css";
 
-const Dashboard = () => {
-  const [user, setUser] = useState(null);
+const Dashboard = ({ user, onLogout }) => {
   const [tasks, setTasks] = useState([]);
 
-  // Fetch user and tasks after component loads
+  // Fetch tasks in real-time
   useEffect(() => {
-    // Fetch authenticated user profile
-    axios
-      .get("http://localhost:8000/accounts/profile/", { withCredentials: true })
-      .then((response) => setUser(response.data))
-      .catch((error) => console.error("Error fetching user:", error));
+    const q = query(collection(db, "tasks"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let tasksArr = [];
+      querySnapshot.forEach((doc) => {
+        tasksArr.push({ ...doc.data(), id: doc.id });
+      });
+      setTasks(tasksArr);
+    });
 
-    // Fetch user's tasks from the Django backend
-    axios
-      .get("http://localhost:8000/api/tasks/", { withCredentials: true })
-      .then((response) => setTasks(response.data))
-      .catch((error) => console.error("Error fetching tasks:", error));
+    return () => unsubscribe();
   }, []);
 
-  const addTask = (taskName) => {
-    const newTask = { name: taskName, completed: false };
-    setTasks([...tasks, newTask]);
-
-    // Optionally post this task to the backend
-    axios
-      .post("http://localhost:8000/api/tasks/", newTask, {
-        withCredentials: true,
-      })
-      .catch((error) => console.error("Error adding task:", error));
+  const addTask = async (taskName) => {
+    try {
+      await addDoc(collection(db, "tasks"), {
+        name: taskName,
+        completed: false,
+        userId: user.uid,
+      });
+    } catch (error) {
+      console.error("Error adding task: ", error);
+    }
   };
 
-  const removeTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-
-    // Optionally delete task from backend
-    axios
-      .delete(`http://localhost:8000/api/tasks/${index}/`, {
-        withCredentials: true,
-      })
-      .catch((error) => console.error("Error deleting task:", error));
+  const toggleTaskCompletion = async (taskId, completed) => {
+    const taskDocRef = doc(db, "tasks", taskId);
+    try {
+      await updateDoc(taskDocRef, { completed: !completed });
+    } catch (error) {
+      console.error("Error updating task: ", error);
+    }
   };
 
-  const toggleTask = (index) => {
-    const updatedTasks = tasks.map((task, i) => {
-      if (i === index) {
-        task.completed = !task.completed;
-      }
-      return task;
-    });
-    setTasks(updatedTasks);
-
-    // Optionally update task completion in backend
-    axios
-      .put(`http://localhost:8000/api/tasks/${index}/`, updatedTasks[index], {
-        withCredentials: true,
-      })
-      .catch((error) => console.error("Error updating task:", error));
+  const deleteTask = async (taskId) => {
+    const taskDocRef = doc(db, "tasks", taskId);
+    try {
+      await deleteDoc(taskDocRef);
+    } catch (error) {
+      console.error("Error deleting task: ", error);
+    }
   };
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {user ? (
-        <div>
-          <h2>Welcome, {user.username}</h2>
-          <TaskInput addTask={addTask} />
-          <TaskList
-            tasks={tasks}
-            removeTask={removeTask}
-            toggleTask={toggleTask}
-          />
-        </div>
-      ) : (
-        <p>Loading user info...</p>
-      )}
+    <div className="dashboard-container">
+      <h1>Welcome, {user.displayName}</h1>
+      <button onClick={onLogout}>Logout</button>
+      <TaskInput addTask={addTask} />
+      <TaskList
+        tasks={tasks}
+        toggleTaskCompletion={toggleTaskCompletion}
+        deleteTask={deleteTask}
+      />
     </div>
   );
 };

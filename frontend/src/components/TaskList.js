@@ -2,15 +2,15 @@ import React from "react";
 import TaskItem from "./TaskItem";
 import "./TaskList.css";
 
-const TaskList = ({ tasks, removeTask, toggleTask }) => {
+const TaskList = ({ tasks, toggleTaskCompletion, deleteTask }) => {
   return (
     <ul className="task-list">
-      {tasks.map((task, index) => (
+      {tasks.map((task) => (
         <TaskItem
-          key={index}
+          key={task.id}
           task={task}
-          removeTask={() => removeTask(index)}
-          toggleTask={() => toggleTask(index)}
+          toggleTaskCompletion={toggleTaskCompletion}
+          deleteTask={deleteTask}
         />
       ))}
     </ul>

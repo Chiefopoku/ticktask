@@ -1,14 +1,14 @@
 import React from "react";
 import "./TaskItem.css";
 
-const TaskItem = ({ task, removeTask, toggleTask }) => {
+const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
   return (
     <li className={`task-item ${task.completed ? "completed" : ""}`}>
-      <span onClick={toggleTask} className="task-name">
+      <span className="task-name" onClick={() => toggleTaskCompletion(task.id)}>
         {task.name}
       </span>
-      <button onClick={removeTask} className="delete-btn">
-        ❌
+      <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+        ✕
       </button>
     </li>
   );

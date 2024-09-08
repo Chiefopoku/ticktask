@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ticktask/static/css/main.d9b145ac.css",
+    "main.js": "/ticktask/static/js/main.a077086b.js",
+    "index.html": "/ticktask/index.html",
+    "main.d9b145ac.css.map": "/ticktask/static/css/main.d9b145ac.css.map",
+    "main.a077086b.js.map": "/ticktask/static/js/main.a077086b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d9b145ac.css",
+    "static/js/main.a077086b.js"
+  ]
+}

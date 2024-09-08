@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+/node_modules
+/.pnp
+.pnp.js
+
+# Firebase Admin SDK private key files
+serviceAccountKey.json
+
+# Firebase environment variables
+.env
+
+# Testing
+/coverage
+
+# Production build
+/build
+/dist
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REACT lint cache
+.cache/
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# MacOS files
+.DS_Store
+
+# Linux files
+*.swp
+
+# Windows files
+Thumbs.db

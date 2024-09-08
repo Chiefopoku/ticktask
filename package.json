@@ -16,15 +16,15 @@
     "django",
     "google-login"
   ],
-  "author": "Your Name",
+  "author": "Emmanuel Opoku-Adjei",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.7.7",
     "firebase": "^10.13.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.26.1",
-    "react-scripts": "5.0.0"
+    "react-scripts": "^3.0.1"
   },
   "devDependencies": {
     "eslint": "^8.0.0"

@@ -1,10 +1,25 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
+  background-color: #e9efec; /* Light background color */
   margin: 0;
   padding: 0;
 }
 
-h1 {
-  color: #333;
+h1,
+h2 {
+  color: #6a9c89; /* Muted green for headings */
+}
+
+button {
+  background-color: #6a9c89; /* Muted green for buttons */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #aab396; /* Slightly darker green on hover */
 }

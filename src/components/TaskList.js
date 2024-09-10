@@ -1,6 +1,6 @@
 import React from "react";
 import TaskItem from "./TaskItem";
-import "./TaskList.css";
+import "./TaskList.css"; // Assuming you have CSS for TaskList styling
 
 const TaskList = ({ tasks, toggleTaskCompletion, deleteTask }) => {
   return (

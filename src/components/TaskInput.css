@@ -1,73 +1,57 @@
-/* Container for the task input form */
-.task-input-container {
+/* TaskInput Styles */
+.task-input {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
-  padding: 10px;
-  background-color: #f9f9f9;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-input input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: border 0.3s ease;
 }
 
-/* The task input field styling */
-.task-input-field {
-  width: 70%;
-  padding: 10px;
-  border: 2px solid #c4dad2;
-  border-radius: 4px;
-  font-size: 16px;
+.task-input input:focus {
+  border: 1px solid #3498db;
   outline: none;
-  transition: border-color 0.3s ease;
 }
 
-/* Change the border color when the input is focused */
-.task-input-field:focus {
-  border-color: #6a9c89;
+.datetime-inputs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* The button used to submit the form */
-.task-input-button {
-  background-color: #6a9c89;
+.datetime-inputs label {
+  font-size: 14px;
+  color: #555;
+}
+
+.datetime-inputs input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.task-input button {
+  padding: 12px 20px;
+  background-color: #3498db;
   color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
   font-size: 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  margin-left: 10px;
   transition: background-color 0.3s ease;
 }
 
-/* Button hover effect */
-.task-input-button:hover {
-  background-color: #558c6f;
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-  .task-input-field {
-    width: 60%;
-  }
-
-  .task-input-button {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .task-input-field {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .task-input-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .task-input-button {
-    width: 100%;
-  }
+.task-input button:hover {
+  background-color: #2980b9;
 }

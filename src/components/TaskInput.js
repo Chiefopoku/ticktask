@@ -1,29 +1,43 @@
 import React, { useState } from "react";
-import "./TaskInput.css"; // Import the CSS file for styling
+import "./TaskInput.css";
 
 const TaskInput = ({ addTask }) => {
-  const [task, setTask] = useState("");
+  const [taskName, setTaskName] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [reminder, setReminder] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (task.trim()) {
-      addTask(task);
-      setTask(""); // Clear the input field after adding the task
+    if (taskName.trim()) {
+      addTask(taskName, dueDate, reminder);
+      setTaskName("");
+      setDueDate("");
+      setReminder("");
     }
   };
 
   return (
-    <form className="task-input-container" onSubmit={handleSubmit}>
+    <form className="task-input" onSubmit={handleSubmit}>
       <input
         type="text"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        placeholder="Enter a new task..."
-        className="task-input-field"
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
+        placeholder="Task name"
+        required
       />
-      <button type="submit" className="task-input-button">
-        Add Task
-      </button>
+      <input
+        type="date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+        placeholder="Due date"
+      />
+      <input
+        type="time"
+        value={reminder}
+        onChange={(e) => setReminder(e.target.value)}
+        placeholder="Reminder time"
+      />
+      <button type="submit">Add Task</button>
     </form>
   );
 };

@@ -1,8 +1,9 @@
+// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase configuration (from .env file)
+// Firebase configuration (use your real credentials in .env file)
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -15,10 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase services
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export auth-related functions and services
 export { auth, db, GoogleAuthProvider, signInWithPopup };

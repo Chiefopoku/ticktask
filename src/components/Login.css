@@ -1,124 +1,79 @@
-/* Login Modal Styles */
+/* Modal Overlay */
 .login-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* Slight dark overlay for focus */
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
+/* Modal Content */
 .login-modal {
-  background-color: #f4f4f9; /* Very light gray */
+  background-color: #fff;
   padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  position: relative;
-}
-
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 24px;
-  color: #666666; /* Softer gray */
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-h1 {
-  color: #333333; /* Darker gray for text */
-  margin-bottom: 20px;
-}
-
-.login-description {
-  font-size: 16px;
-  color: #666666; /* Softer text color */
-  margin-bottom: 30px;
-}
-
-/* Login Modal Overlay */
-.login-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* Slight dark overlay for focus */
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Centers modal vertically and horizontally */
-  z-index: 1000;
-}
-
-/* Login Modal */
-.login-modal {
-  background-color: #f4f4f9; /* Very light gray */
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center; /* Center text */
-  position: relative;
+  border-radius: 8px;
   width: 100%;
-  max-width: 400px; /* Control the modal width */
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  text-align: center; /* Center the text */
 }
 
-/* Close Modal Button */
 .close-modal {
   position: absolute;
   top: 10px;
-  right: 20px;
-  font-size: 24px;
-  color: #666666; /* Softer gray */
+  right: 10px;
   background: none;
   border: none;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #333;
 }
 
-/* Center the heading and description */
-h1 {
-  color: #333333; /* Darker gray for text */
-  margin-bottom: 20px;
+.close-modal:hover {
+  color: #ff0000;
 }
 
 .login-description {
-  font-size: 16px;
-  color: #666666; /* Softer text color */
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
 }
 
-/* Google Sign-In Button */
+/* Login Button */
 .login-button {
-  background-color: #809bb1; /* Muted blue */
-  color: #fff; /* White text */
-  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #4285f4;
+  color: white;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 1.2rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 0 auto; /* Center the button horizontally */
+  margin: 0 auto; /* Center the button */
+  width: 100%; /* Make the button full-width */
+  max-width: 280px; /* Set a maximum width for the button */
 }
 
 .login-button:hover {
-  background-color: #577a9b; /* Darker blue for hover */
+  background-color: #357ae8;
 }
 
-.google-logo {
-  width: 20px;
-  height: 20px;
+/* Google Icon in Button */
+.google-icon {
+  margin-right: 10px;
 }
 
-/* Blur effect for the background content only */
-.content.blur {
-  filter: blur(8px);
+/* Adjust the button text alignment */
+.login-button span {
+  text-align: center;
+  flex: 1;
 }

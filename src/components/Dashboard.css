@@ -1,14 +1,60 @@
-.dashboard-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.about-page {
+  padding: 50px;
+  background-color: #f4f4f9;
+  color: #333;
+  font-family: "Roboto", sans-serif;
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 15px;
-  }
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1,
+h2 {
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #555;
+}
+
+.mission-section,
+.features-section,
+.community-section,
+.security-section,
+.get-started-section {
+  margin-bottom: 50px;
+}
+
+.features-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features-section ul li {
+  margin-bottom: 15px;
+}
+
+.features-section strong {
+  color: #333;
+}
+
+.get-started-btn {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  background-color: #ffc107;
+  color: #333;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.get-started-btn:hover {
+  background-color: #e0a800;
+  transform: translateY(-3px);
 }

@@ -1,66 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
-const Header = ({
-  isAuthenticated,
-  onLogout,
-  handleSearch,
-  theme,
-  toggleTheme,
-}) => {
+const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Toggle mobile menu
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
-    <header className="header">
-      <div className="header-brand">
-        <h1>TickTask</h1>
-      </div>
-      <nav>
-        <ul className="navbar">
-          {isAuthenticated ? (
-            <>
+    <header className="navbar">
+      <div className="navbar-container">
+        <h1 className="navbar-brand">
+          <Link to="/">TickTask</Link>
+        </h1>
+        <nav className={`nav ${isMobileMenuOpen ? "open" : ""}`}>
+          <ul className="nav-links">
+            <li>
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/features" onClick={() => setIsMobileMenuOpen(false)}>
+                Features
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
+                About
+              </Link>
+            </li>
+            {!isAuthenticated ? (
               <li>
-                <Link to="/dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  className="search-bar"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </li>
-              <li>
-                <Link to="/notifications" className="notification-link">
-                  <span className="notification-icon">🔔</span>
-                  <span className="badge">3</span>
-                  {/* Notification count */}
-                </Link>
-              </li>
-              <li className="nav-item dropdown">
-                <button className="dropdown-btn">Profile</button>
-                <div className="dropdown-content">
-                  <Link to="/profile">My Profile</Link>
-                  <Link to="/settings">Settings</Link>
-                </div>
-              </li>
-              <li>
-                <button onClick={toggleTheme} className="theme-btn">
-                  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+                <button className="login-btn" onClick={onLogin}>
+                  Login
                 </button>
               </li>
+            ) : (
               <li>
-                <button onClick={onLogout} className="logout-btn">
+                <button className="logout-btn" onClick={onLogout}>
                   Logout
                 </button>
               </li>
-            </>
-          ) : (
-            <li>
-              <Link to="/">Login</Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+            )}
+          </ul>
+        </nav>
+        <div className="mobile-menu" onClick={handleMobileMenuToggle}>
+          <span className="menu-icon">&#9776;</span>
+        </div>
+      </div>
     </header>
   );
 };

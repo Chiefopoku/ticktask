@@ -1,0 +1,142 @@
+/* General Layout */
+.features-page {
+  padding: 60px 40px;
+  background-color: #f0f4f8;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.features-header h1 {
+  font-size: 40px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  letter-spacing: 1.2px;
+}
+
+.features-header p {
+  font-size: 18px;
+  color: #7f8c8d;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Features List */
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+}
+
+.feature-item {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.feature-item img {
+  width: 96px;
+  margin-bottom: 25px;
+}
+
+.feature-item h2 {
+  font-size: 26px;
+  color: #34495e;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.feature-item p {
+  font-size: 16px;
+  color: #7f8c8d;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* Specific Secure Data Icon Alignment Fix */
+.feature-item img.secure-data-icon {
+  width: 96px; /* Ensure uniform size */
+  margin-bottom: 25px; /* Ensure consistent spacing */
+}
+
+/* Call-to-Action Section */
+.cta-section {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.cta-section h2 {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+.cta-btn {
+  padding: 12px 28px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  background-color: #333;
+  color: #fff;
+  margin-top: 60px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-item {
+    padding: 30px;
+  }
+
+  .features-header h1 {
+    font-size: 32px;
+  }
+
+  .features-header p {
+    font-size: 16px;
+  }
+
+  .cta-section h2 {
+    font-size: 28px;
+  }
+
+  .cta-btn {
+    padding: 10px 24px;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,135 @@
+/* General AboutPage Styling */
+.about-page {
+  background-color: #f7f7f7; /* Light background */
+  color: #333; /* Dark text */
+  font-family: "Poppins", sans-serif;
+  padding: 40px 20px;
+}
+
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #fff; /* White background for the content */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for elevation */
+}
+
+/* Title Styling */
+.about-container h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #34495e; /* Dark grey-blue for heading */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-container h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2c3e50; /* Slightly lighter grey-blue for subheadings */
+  margin-bottom: 15px;
+  border-left: 4px solid #ffc107; /* Accent border */
+  padding-left: 10px;
+  text-align: left;
+}
+
+/* Introduction Text */
+.intro-text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Sections */
+.mission-section,
+.features-section,
+.community-section,
+.security-section,
+.get-started-section {
+  margin-bottom: 40px;
+}
+
+.about-container p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444;
+}
+
+/* Features List */
+.features-section ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: left; /* Adjusts text alignment */
+  margin: 0 auto; /* Centers the list */
+  max-width: 850px; /* Optional: limits the width for better readability */
+}
+
+.features-section li {
+  font-size: 16px;
+  padding: 15px;
+  background-color: #f1f1ec; /* Soft background for list items */
+  margin-bottom: 10px;
+  border-radius: 6px;
+  color: #34495e;
+  text-align: left; /* Ensures all text is aligned to the left */
+  display: flex; /* Enables inline alignment of icon and text */
+  align-items: center;
+}
+
+.features-section li strong {
+  color: #2c3e50; /* Darker color for emphasis */
+  margin-right: 10px; /* Adds spacing between the icon and text */
+}
+
+/* Icon inside features */
+.features-section li img {
+  width: 32px; /* Controls the size of the icon */
+  height: 32px; /* Ensures icon maintains size */
+  margin-right: 15px; /* Adds spacing between icon and text */
+}
+
+/* Get Started Button */
+.get-started-btn {
+  background-color: #ffc107; /* Light green */
+  color: #000000;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 20px auto 0;
+  text-align: center;
+}
+
+.get-started-btn:hover {
+  background-color: #ebb207; /* Darker green on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 20px;
+  }
+
+  .about-container h1 {
+    font-size: 28px;
+  }
+
+  .about-container h2 {
+    font-size: 24px;
+  }
+
+  .features-section li {
+    font-size: 14px;
+  }
+
+  .get-started-btn {
+    padding: 10px 20px;
+  }
+}

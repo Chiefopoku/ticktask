@@ -1,10 +1,10 @@
+/* TaskList Styles */
 .task-list {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  background-color: #e9efec; /* Light greenish background */
-  border-radius: 4px;
-  border: 1px solid #c4dad2; /* Light border */
+  margin: 0;
+}
+
+.task-list .task-item:not(:last-child) {
+  margin-bottom: 15px;
 }

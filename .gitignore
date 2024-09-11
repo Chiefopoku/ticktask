@@ -44,3 +44,4 @@ serviceAccountKey.json
 
 # Windows files
 Thumbs.db
+.vercel

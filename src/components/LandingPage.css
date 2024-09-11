@@ -23,7 +23,7 @@ body {
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("public/images/StockCake-Planning daily tasks_1725825012.jpg") no-repeat
+    url("/images/StockCake-Planning daily tasks_1725825012.jpg") no-repeat
       center/cover;
   color: white;
   text-align: center;

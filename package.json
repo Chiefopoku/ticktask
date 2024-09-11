@@ -2,7 +2,7 @@
   "name": "ticktask",
   "version": "1.0.0",
   "description": "TickTask is a task manager app with Google OAuth login and integration with Firebase backend.",
-  "homepage": "https://Chiefopoku.github.io/ticktask",
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

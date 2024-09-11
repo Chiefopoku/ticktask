@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ticktask/static/css/main.6858ecd5.css",
-    "main.js": "/ticktask/static/js/main.b50ec8cd.js",
+    "main.js": "/ticktask/static/js/main.274e6517.js",
     "static/media/StockCake-Planning daily tasks_1725825012.jpg": "/ticktask/static/media/StockCake-Planning daily tasks_1725825012.bc5be6b2bc97984c8b38.jpg",
     "index.html": "/ticktask/index.html",
     "main.6858ecd5.css.map": "/ticktask/static/css/main.6858ecd5.css.map",
-    "main.b50ec8cd.js.map": "/ticktask/static/js/main.b50ec8cd.js.map"
+    "main.274e6517.js.map": "/ticktask/static/js/main.274e6517.js.map"
   },
   "entrypoints": [
     "static/css/main.6858ecd5.css",
-    "static/js/main.b50ec8cd.js"
+    "static/js/main.274e6517.js"
   ]
 }

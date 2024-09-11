@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
 import FeaturesPage from "./components/FeaturesPage";
@@ -8,12 +13,12 @@ import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import { auth, GoogleAuthProvider, signInWithPopup } from "./firebase";
 import Header from "./components/Header";
-import "./App.css"; // Assuming you're adding CSS for modal and blur effects
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("light");
-  const [showLoginModal, setShowLoginModal] = useState(false); // Modal state
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -31,7 +36,7 @@ function App() {
     signInWithPopup(auth, provider)
       .then((result) => {
         setUser(result.user);
-        setShowLoginModal(false); // Close modal on successful login
+        setShowLoginModal(false);
       })
       .catch((error) => {
         console.error("Error during login:", error);
@@ -47,7 +52,6 @@ function App() {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  // Close modal when clicking outside the modal content or on the "X"
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
@@ -56,25 +60,18 @@ function App() {
     <Router>
       <Header
         isAuthenticated={!!user}
-        onLogin={() => setShowLoginModal(true)} // Show modal on login click
+        onLogin={() => setShowLoginModal(true)}
         onLogout={handleLogout}
         theme={theme}
         toggleTheme={toggleTheme}
       />
       <div className={`app ${theme} ${showLoginModal ? "blurred" : ""}`}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                isAuthenticated={!!user}
-                onLogin={() => setShowLoginModal(true)} // Show modal on "Get Started"
-                theme={theme}
-                toggleTheme={toggleTheme}
-              />
-            }
-          />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          {/* Default route is the landing page */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Other pages */}
+          <Route path="/login" element={<Login />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route
@@ -85,10 +82,11 @@ function App() {
               </PrivateRoute>
             }
           />
+          {/* Redirect any unknown routes back to landing page */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
 
-      {/* Conditionally render the login modal */}
       {showLoginModal && (
         <div className="modal-overlay" onClick={closeLoginModal}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>

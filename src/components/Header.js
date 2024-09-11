@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css"; // Assuming you have a separate CSS for header
 
 const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <header className="navbar">
       <div className="navbar-container">
         <h1 className="navbar-brand">
           <Link to="/">TickTask</Link>
         </h1>
-        <nav className="nav">
+
+        <nav className={`nav ${isMobileMenuOpen ? "open" : ""}`}>
           <ul className="nav-links">
             <li>
               <Link to="/">Home</Link>
@@ -21,7 +28,6 @@ const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
               <Link to="/about">About</Link>
             </li>
 
-            {/* Only show the Dashboard link if the user is authenticated */}
             {isAuthenticated && (
               <li>
                 <Link to="/dashboard">Dashboard</Link>
@@ -44,8 +50,8 @@ const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
           </ul>
         </nav>
 
-        {/* Mobile menu toggle (optional, if you have mobile styling) */}
-        <div className="mobile-menu">
+        {/* Mobile menu toggle */}
+        <div className="mobile-menu" onClick={toggleMobileMenu}>
           <span className="menu-icon">&#9776;</span>
         </div>
       </div>

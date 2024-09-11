@@ -5,25 +5,50 @@ const TaskInput = ({ addTask }) => {
   const [taskName, setTaskName] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [reminder, setReminder] = useState("");
-  const [priority, setPriority] = useState("Low"); // New priority state
+  const [priority, setPriority] = useState("Low");
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!taskName.trim()) {
-      setError("Task name is required.");
+      setError("Task name is required");
       return;
     }
 
-    // Clear error if inputs are valid
-    setError(null);
+    let reminderDateTime = null;
 
-    addTask(taskName, dueDate, reminder, priority);
+    // Only set reminder if user selected a valid reminder time
+    if (reminder && dueDate) {
+      try {
+        const selectedDate = new Date(dueDate);
+
+        if (isNaN(selectedDate.getTime())) {
+          throw new Error("Invalid due date");
+        }
+
+        const [hours, minutes] = reminder.split(":");
+        if (!hours || !minutes) {
+          throw new Error("Invalid reminder time");
+        }
+
+        selectedDate.setHours(parseInt(hours, 10));
+        selectedDate.setMinutes(parseInt(minutes, 10));
+
+        reminderDateTime = selectedDate.toISOString(); // Store as ISO string
+        console.log("Reminder set for:", reminderDateTime);
+      } catch (err) {
+        setError("Invalid reminder time or date");
+        return;
+      }
+    }
+
+    addTask(taskName, dueDate, reminderDateTime, priority);
     setTaskName("");
     setDueDate("");
     setReminder("");
     setPriority("Low");
+    setError(null);
   };
 
   return (

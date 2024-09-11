@@ -21,6 +21,31 @@ const Dashboard = ({ user, onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
+  // Request notification permission
+  useEffect(() => {
+    if (
+      Notification.permission !== "granted" &&
+      Notification.permission !== "denied"
+    ) {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  // Function to trigger a notification
+  const triggerNotification = (taskName, reminderTime) => {
+    const notificationTitle = `Reminder: ${taskName}`;
+    const notificationOptions = {
+      body: `Your task "${taskName}" is due by ${new Date(
+        reminderTime
+      ).toLocaleString()}`,
+      icon: "/path-to-icon/icon.png", // Optional: add your app icon path here
+    };
+
+    if (Notification.permission === "granted") {
+      new Notification(notificationTitle, notificationOptions);
+    }
+  };
+
   // Add task function
   const addTask = async (taskName, dueDate, reminder) => {
     try {
@@ -47,7 +72,7 @@ const Dashboard = ({ user, onLogout }) => {
     }
   };
 
-  // Fetch tasks for the authenticated user
+  // Fetch tasks for the authenticated user and check for reminders
   useEffect(() => {
     const q = query(collection(db, "tasks"), where("userId", "==", user.uid));
 
@@ -68,6 +93,20 @@ const Dashboard = ({ user, onLogout }) => {
         const completedTasks = tasksArr.filter((task) => task.completed).length;
         setProgress((completedTasks / tasksArr.length) * 100);
         setLoading(false); // Stop loading when tasks are fetched
+
+        // Check for tasks with reminders within the next hour and trigger notifications
+        const now = new Date();
+        tasksArr.forEach((task) => {
+          if (task.reminder && !task.completed) {
+            const reminderTime = new Date(task.reminder);
+            if (
+              reminderTime > now &&
+              (reminderTime - now) / (1000 * 60) <= 60
+            ) {
+              triggerNotification(task.name, reminderTime);
+            }
+          }
+        });
       },
       (error) => {
         console.error("Error fetching tasks: ", error);

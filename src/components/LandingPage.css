@@ -1,18 +1,19 @@
+/* Importing Fonts from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;600&family=Montserrat:wght@400;600&display=swap");
+
 /* General Layout */
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f9f9f9;
   color: #333;
 }
 
-/* Landing Page */
 .landing-page {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: #ffffff; /* White background */
 }
 
 /* Hero Section */
@@ -24,55 +25,40 @@ body {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
     url("/Users/chiefopoku/Documents/GitHub/ticktask/src/StockCake-Planning daily tasks_1725825012.jpg")
       no-repeat center/cover;
-  color: #fff; /* White text on hero */
+  color: white;
   text-align: center;
 }
 
 .hero-content {
   max-width: 800px;
-  padding: 40px;
+  padding: 20px;
   z-index: 1;
 }
 
 .hero-content h1 {
-  font-size: 3.5rem;
-  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
+  font-size: 4vw; /* Use viewport width for responsive text */
+  font-weight: 700;
   letter-spacing: 1.5px;
   margin-bottom: 20px;
-  color: #ffcc00; /* Yellow text for the heading */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Black shadow for readability */
+  color: #ffcc00;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .hero-subtext {
+  font-family: "Lora", serif;
   font-size: 1.2rem;
   margin-bottom: 40px;
-  color: #fff; /* White text */
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Black shadow for better contrast */
+  color: white;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
-.hero-btn {
-  background-color: #ffcc00; /* Bright yellow button */
-  color: #333; /* Dark text color */
-  padding: 15px 40px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.hero-btn:hover {
-  background-color: #e0b800; /* Slightly darker yellow on hover */
-  transform: translateY(-3px);
-}
-
-/* Button Styling */
+/* Hero Section Button Styling */
 .hero-btn,
 .cta-btn,
 .login-btn {
-  background-color: #ffcc00; /* Bright yellow */
-  color: #333; /* Dark text */
+  background-color: #ffc107 !important; /* Yellow background with !important to ensure it overrides any other styles */
+  color: #333; /* Dark text color */
   padding: 15px 40px;
   font-size: 1.2rem;
   font-weight: 600;
@@ -85,38 +71,62 @@ body {
 .hero-btn:hover,
 .cta-btn:hover,
 .login-btn:hover {
-  background-color: #e0b800; /* Darker yellow on hover */
+  background-color: #ffc107 !important; /* Darker yellow on hover with !important */
+  transform: translateY(-3px);
+}
+
+/* Button Styling */
+.hero-btn,
+.cta-btn,
+.login-btn {
+  background-color: #ffc107;
+  color: #333;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-btn:hover,
+.cta-btn:hover,
+.login-btn:hover {
+  background-color: #e0b800;
   transform: translateY(-3px);
 }
 
 /* CTA Section */
 .cta-section {
   text-align: center;
-  padding: 60px 20px;
-  background-color: #d3d3d3; /* Ash background */
-  color: #333; /* Dark text for contrast */
+  padding: 50px 20px;
+  background-color: #d3d3d3;
 }
 
 .cta-section h2 {
-  font-size: 2.5rem;
-  color: #333; /* Dark color */
+  font-family: "Montserrat", sans-serif;
+  font-size: 3vw; /* Use viewport width for responsive headings */
+  color: #333;
   margin-bottom: 20px;
 }
 
 .cta-text {
-  font-size: 1.2rem;
-  color: #555; /* Lighter gray for text */
+  font-family: "Lora", serif;
+  font-size: 1.1rem;
+  color: #555;
   max-width: 600px;
   margin: 0 auto 40px;
   line-height: 1.6;
 }
 
 .cta-btn {
-  background-color: #ffcc00; /* Bright yellow */
+  font-family: "Poppins", sans-serif;
+  background-color: #ffcc00;
   padding: 15px 40px;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #333; /* Dark text */
+  color: #333;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -130,16 +140,17 @@ body {
 
 /* Footer */
 .footer {
+  font-family: "Poppins", sans-serif;
   text-align: center;
   padding: 20px;
-  background-color: #333; /* Dark gray */
-  color: #ffcc00; /* Yellow text */
+  background-color: #333;
+  color: #ffcc00;
   font-size: 0.9rem;
   border-top: 1px solid #555;
 }
 
 .footer a {
-  color: #ffcc00; /* Yellow links */
+  color: #ffcc00;
   text-decoration: none;
   margin: 0 10px;
 }
@@ -150,8 +161,18 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .hero-content {
+    padding: 20px; /* Reduced padding for small screens */
+  }
+
   .hero-content h1 {
-    font-size: 2.5rem; /* Adjusted size for smaller screens */
+    font-size: 2.5rem; /* Smaller size for small screens */
+  }
+
+  .hero-btn,
+  .cta-btn {
+    font-size: 1rem;
+    padding: 12px 25px;
   }
 
   .cta-section h2 {
@@ -159,11 +180,30 @@ body {
   }
 
   .cta-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .cta-btn {
     font-size: 1rem;
     padding: 12px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem; /* Even smaller size for extra small screens */
+  }
+
+  .cta-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .cta-text {
+    font-size: 0.95rem;
+  }
+
+  .cta-btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
   }
 }

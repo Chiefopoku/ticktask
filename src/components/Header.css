@@ -6,7 +6,8 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  position: sticky;
+  position: fixed;
+  z-index: 1000;
   top: 0;
 }
 
@@ -86,6 +87,7 @@
   color: #fff;
   font-size: 1.8rem;
   cursor: pointer;
+  padding-top: 15px;
 }
 
 .menu-icon {

@@ -4,6 +4,8 @@
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -24,7 +26,7 @@
 }
 
 .task-list li {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .no-tasks-message {
@@ -44,4 +46,76 @@
   align-items: center;
   font-size: 1.5rem;
   color: #007bff;
+}
+
+/* Media Queries for Responsive Design */
+
+/* For tablets and smaller devices */
+@media (max-width: 768px) {
+  .task-list-container {
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  .task-list-header h2 {
+    font-size: 1.3rem; /* Slightly smaller heading for tablets */
+  }
+
+  .no-tasks-message {
+    font-size: 1.1rem; /* Slightly smaller font size for the message */
+    padding: 15px; /* Reduced padding */
+  }
+
+  .loading-spinner {
+    font-size: 1.3rem; /* Smaller font size for the spinner */
+  }
+}
+
+/* For mobile devices (small screens) */
+@media (max-width: 480px) {
+  .task-list-container {
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .task-list-header h2 {
+    font-size: 1.2rem; /* Smaller heading for mobile devices */
+  }
+
+  .task-list li {
+    margin-bottom: 8px; /* Reduced space between tasks for mobile */
+  }
+
+  .no-ttasks-message {
+    font-size: 1rem; /* Smaller message font */
+    padding: 12px;
+  }
+
+  .loading-spinner {
+    font-size: 1.2rem; /* Even smaller font size for the spinner on mobile */
+  }
+}
+
+/* Extra Small Screens (e.g., very small mobile phones) */
+@media (max-width: 360px) {
+  .task-list-container {
+    padding: 8px; /* Further reduce padding */
+  }
+
+  .task-list-header h2 {
+    font-size: 1.1rem; /* Smaller heading for very small screens */
+  }
+
+  .task-list li {
+    margin-bottom: 5px; /* Tighter spacing between tasks */
+  }
+
+  .no-tasks-message {
+    font-size: 0.9rem; /* Smaller message font */
+    padding: 10px;
+  }
+
+  .loading-spinner {
+    font-size: 1.1rem;
+  }
 }

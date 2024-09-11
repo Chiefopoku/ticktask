@@ -12,16 +12,24 @@ h1 {
   justify-content: center; /* Horizontally center the content */
   align-items: center;
   color: #333; /* Dark gray heading color */
+  font-size: 2rem;
 }
 
 /* Header */
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 20px;
   align-items: center;
   padding: 20px 0;
   border-bottom: 2px solid #d8d8d8; /* Ash-colored border */
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 /* Logout Button */
@@ -59,12 +67,19 @@ h1 {
 .progress-bar {
   background-color: #f0b400; /* Yellow progress bar */
   color: white;
-  padding: 15px 10px;
+  padding: 25px 0px;
   height: 24px;
   border-radius: 10px;
   transition: width 0.4s ease;
   text-align: center;
   font-weight: bold;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .progress-bar {
+    font-size: 0.9rem; /* Smaller text size for smaller screens */
+  }
 }
 
 /* Filter Buttons */
@@ -82,6 +97,7 @@ h1 {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 1rem;
 }
 
 .filter-buttons button.active {
@@ -90,6 +106,16 @@ h1 {
 
 .filter-buttons button:hover {
   background-color: #666; /* Lighter black/ash on hover */
+}
+
+@media (max-width: 768px) {
+  .filter-buttons {
+    flex-direction: column; /* Stack filter buttons vertically on smaller screens */
+  }
+
+  .filter-buttons button {
+    width: 100%; /* Full width on small screens */
+  }
 }
 
 /* Loading Spinner */
@@ -112,6 +138,7 @@ h1 {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #d8d8d8; /* Ash border */
+  font-size: 1rem;
 }
 
 .task-input input {
@@ -128,4 +155,64 @@ h1 {
 
 .task-input button:hover {
   background-color: #d3a42f; /* Darker yellow on hover */
+}
+
+@media (max-width: 768px) {
+  .task-input input,
+  .task-input button {
+    font-size: 0.9rem; /* Slightly smaller input and button text for smaller screens */
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 15px; /* Reduced padding for smaller screens */
+  }
+
+  h1 {
+    font-size: 1.8rem; /* Smaller heading for smaller screens */
+  }
+
+  .logout-btn {
+    font-size: 0.9rem; /* Smaller button text for small screens */
+  }
+
+  .progress-bar {
+    padding: 10px; /* Smaller padding for the progress bar on small screens */
+  }
+
+  .task-input {
+    gap: 5px; /* Tighter gap between input fields */
+  }
+
+  .task-input input,
+  .task-input button {
+    font-size: 0.9rem;
+    padding: 8px; /* Smaller padding for inputs */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 10px; /* Reduced padding for extra small screens */
+  }
+
+  h1 {
+    font-size: 1.6rem; /* Even smaller heading for extra small screens */
+  }
+
+  .logout-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px; /* Smaller logout button for extra small screens */
+  }
+
+  .progress-bar {
+    padding: 8px; /* Reduced padding for the progress bar on extra small screens */
+  }
+
+  .task-input input,
+  .task-input button {
+    padding: 7px;
+  }
 }

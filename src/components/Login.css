@@ -5,78 +5,88 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 999;
 }
 
-h1 {
-  color: #000000;
-}
-/* Modal Content */
+/* Modal Box */
 .login-modal {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 8px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
-  text-align: center; /* Center the text */
 }
 
+/* Close Modal Button */
 .close-modal {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 24px;
   cursor: pointer;
-  color: #333;
 }
 
-.close-modal:hover {
-  color: #000000;
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .login-description {
-  margin-bottom: 20px;
   font-size: 1rem;
-  color: #333;
+  margin-bottom: 30px;
   text-align: center;
+  color: #555;
 }
 
-/* Login Button */
+/* Login Buttons */
 .login-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: #69654f;
+  background-color: #4285f4;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 12px;
+  width: 100%;
   cursor: pointer;
-  margin: 0 auto; /* Center the button */
-  width: 100%; /* Make the button full-width */
-  max-width: 280px; /* Set a maximum width for the button */
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-button:hover {
-  background-color: #ffc107;
-}
-
-/* Google Icon in Button */
 .google-icon {
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
-/* Adjust the button text alignment */
-.login-button span {
+.login-button.anonymous-login {
+  background-color: #444;
+}
+
+/* Input Group */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
   text-align: center;
-  flex: 1;
+  margin-top: 10px;
 }

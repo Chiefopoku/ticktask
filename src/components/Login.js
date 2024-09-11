@@ -1,12 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  auth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+} from "../firebase"; // Ensure these Firebase auth methods are imported
 import "./Login.css"; // Ensure your CSS is imported
 
 const Login = ({ onLogin, onClose }) => {
-  // Handle clicks on the overlay to close the modal
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  // Handle overlay click to close the modal
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
+  };
+
+  // Google sign-in
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        onLogin(result.user);
+        onClose();
+      })
+      .catch((error) => setError(error.message));
+  };
+
+  // Anonymous login
+  const handleAnonymousLogin = () => {
+    signInAnonymously(auth)
+      .then((result) => {
+        onLogin(result.user);
+        onClose();
+      })
+      .catch((error) => setError(error.message));
+  };
+
+  // Email/Password login
+  const handleEmailLogin = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        onLogin(result.user);
+        onClose();
+      })
+      .catch((error) => setError(error.message));
   };
 
   return (
@@ -19,7 +62,9 @@ const Login = ({ onLogin, onClose }) => {
         <p className="login-description">
           Manage your tasks efficiently with TickTask. Sign in to continue.
         </p>
-        <button className="login-button" onClick={onLogin}>
+
+        {/* Google Sign-in Button */}
+        <button className="login-button" onClick={handleGoogleLogin}>
           <div className="google-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -52,6 +97,42 @@ const Login = ({ onLogin, onClose }) => {
           </div>
           <span>Sign in with Google</span>
         </button>
+
+        {/* Email/Password Login Form */}
+        <form onSubmit={handleEmailLogin} className="email-form">
+          <div className="input-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-button">
+            Sign in with Email
+          </button>
+        </form>
+
+        {/* Anonymous Sign-in Button */}
+        <button
+          className="login-button anonymous-login"
+          onClick={handleAnonymousLogin}
+        >
+          Continue as Guest
+        </button>
+
+        {/* Error Message Display */}
+        {error && <p className="error-message">{error}</p>}
       </div>
     </div>
   );

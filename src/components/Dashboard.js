@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { db } from "../firebase"; // Import Firestore
 import {
   collection,
   addDoc,
@@ -9,7 +10,6 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase"; // Firestore setup
 import TaskInput from "./TaskInput";
 import TaskList from "./TaskList";
 import "./Dashboard.css"; // Assuming you have CSS for Dashboard styling

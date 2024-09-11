@@ -7,12 +7,17 @@ const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
   return (
     <li className={`task-item ${completed ? "completed" : ""}`}>
       <div className="task-info">
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => toggleTaskCompletion(task.id, completed)}
-        />
-        <span>{name}</span>
+        <label className="checkbox-container">
+          <input
+            type="checkbox"
+            checked={completed}
+            onChange={() => toggleTaskCompletion(task.id, completed)}
+          />
+          <span className="checkmark"></span>
+        </label>
+        <span className={`task-name ${completed ? "task-completed" : ""}`}>
+          {name}
+        </span>
         {dueDate && (
           <div className="task-due-date">
             <small>Due: {new Date(dueDate).toLocaleString()}</small>
@@ -24,8 +29,12 @@ const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
           </div>
         )}
       </div>
-      <button className="delete-btn" onClick={() => deleteTask(task.id)}>
-        Delete
+      <button
+        className="delete-btn"
+        aria-label={`Delete task: ${name}`}
+        onClick={() => deleteTask(task.id)}
+      >
+        🗑️
       </button>
     </li>
   );

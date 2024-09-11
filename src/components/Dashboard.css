@@ -1,60 +1,131 @@
-.about-page {
-  padding: 50px;
-  background-color: #f4f4f9;
-  color: #333;
-  font-family: "Roboto", sans-serif;
-}
-
-.about-container {
-  max-width: 1200px;
+/* General Dashboard Layout */
+.dashboard-container {
+  max-width: 900px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4; /* Ash background for the whole dashboard */
+  color: #333; /* Text color to ensure good contrast */
 }
 
-h1,
-h2 {
-  color: #007bff;
+h1 {
+  text-align: center;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center;
+  color: #333; /* Dark gray heading color */
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #d8d8d8; /* Ash-colored border */
+}
+
+/* Logout Button */
+.logout-btn {
+  background-color: #f0b400; /* Yellow background */
+  color: #000; /* Black text */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d3a42f; /* Slightly darker yellow on hover */
+}
+
+/* Task Section */
+.task-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #000; /* Black for section heading */
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  width: 100%;
+  background-color: #e0e0e0; /* Light ash background for the progress bar */
+  border-radius: 10px;
+  overflow: hidden;
   margin-bottom: 20px;
 }
 
-p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: #555;
+.progress-bar {
+  background-color: #f0b400; /* Yellow progress bar */
+  color: white;
+  padding: 15px 10px;
+  height: 24px;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  text-align: center;
+  font-weight: bold;
 }
 
-.mission-section,
-.features-section,
-.community-section,
-.security-section,
-.get-started-section {
-  margin-bottom: 50px;
+/* Filter Buttons */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.features-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.features-section ul li {
-  margin-bottom: 15px;
-}
-
-.features-section strong {
-  color: #333;
-}
-
-.get-started-btn {
-  padding: 15px 30px;
-  font-size: 1.2rem;
-  background-color: #ffc107;
-  color: #333;
+.filter-buttons button {
+  background-color: #333; /* Black background for buttons */
+  color: #fff; /* White text */
   border: none;
-  border-radius: 50px;
+  padding: 10px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.get-started-btn:hover {
-  background-color: #e0a800;
-  transform: translateY(-3px);
+.filter-buttons button.active {
+  background-color: #f0b400; /* Yellow for active buttons */
+}
+
+.filter-buttons button:hover {
+  background-color: #666; /* Lighter black/ash on hover */
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666; /* Ash-colored text for loading spinner */
+}
+
+/* Task Input Styling */
+.task-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.task-input input,
+.task-input button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #d8d8d8; /* Ash border */
+}
+
+.task-input input {
+  background-color: #fff; /* White background for inputs */
+  color: #333; /* Black text */
+}
+
+.task-input button {
+  background-color: #f0b400; /* Yellow for add task button */
+  color: #000; /* Black text */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-input button:hover {
+  background-color: #d3a42f; /* Darker yellow on hover */
 }

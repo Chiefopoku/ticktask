@@ -1,7 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./AboutPage.css"; // Importing the CSS for styling
 
-const AboutPage = () => {
+const AboutPage = ({ isAuthenticated, onLogin }) => {
+  const navigate = useNavigate(); // Use navigate to programmatically redirect
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      // If user is authenticated, navigate to dashboard
+      navigate("/dashboard");
+    } else {
+      // If user is not authenticated, trigger the login modal
+      onLogin();
+    }
+  };
+
   return (
     <div className="about-page">
       <div className="about-container">
@@ -76,7 +89,6 @@ const AboutPage = () => {
             Whether you're working on personal projects, managing a team, or
             just trying to keep track of daily tasks, TickTask is here to help.
           </p>
-          <button className="get-started-btn">Get Started</button>
         </section>
       </div>
     </div>

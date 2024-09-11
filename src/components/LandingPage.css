@@ -1,9 +1,18 @@
-/* General Body Styling */
+/* General Layout */
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
-  background-color: #f4f4f9;
+  font-family: "Inter", sans-serif;
+  background-color: #f9f9f9;
   color: #333;
+}
+
+/* Landing Page */
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  background-color: #ffffff; /* White background */
 }
 
 /* Hero Section */
@@ -11,174 +20,150 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  background: linear-gradient(
-      to bottom right,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0.5)
-    ),
-    url("/Users/chiefopoku/Documents/GitHub/ticktask/src/StockCake-Planning daily tasks_1725825012.jpg"); /* Ensure the path to your image is correct */
-  background-size: cover;
-  background-position: center;
-  color: white;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("/Users/chiefopoku/Documents/GitHub/ticktask/src/StockCake-Planning daily tasks_1725825012.jpg")
+      no-repeat center/cover;
+  color: #fff; /* White text on hero */
   text-align: center;
 }
 
 .hero-content {
-  max-width: 900px;
-  padding: 40px 20px;
+  max-width: 800px;
+  padding: 40px;
   z-index: 1;
 }
 
-.hero-text h2 {
+.hero-content h1 {
   font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
   margin-bottom: 20px;
-  line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ffcc00; /* Yellow text for the heading */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Black shadow for readability */
 }
 
-.hero-text p {
-  font-size: 1.3rem;
+.hero-subtext {
+  font-size: 1.2rem;
   margin-bottom: 40px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  color: #fff; /* White text */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Black shadow for better contrast */
 }
 
-/* Yellow Get Started Button */
-.cta-btn {
-  padding: 15px 35px;
-  font-size: 1.3rem;
-  background-color: #ffc107; /* Yellow color */
-  color: black;
+.hero-btn {
+  background-color: #ffcc00; /* Bright yellow button */
+  color: #333; /* Dark text color */
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
   border: none;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 6px 12px rgba(255, 193, 7, 0.2);
 }
 
-.cta-btn:hover {
-  background-color: #e0a800; /* Darker yellow on hover */
-  transform: translateY(-5px);
+.hero-btn:hover {
+  background-color: #e0b800; /* Slightly darker yellow on hover */
+  transform: translateY(-3px);
 }
 
-/* Landing Page Layout */
-.landing-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Button Styling */
+.hero-btn,
+.cta-btn,
+.login-btn {
+  background-color: #ffcc00; /* Bright yellow */
+  color: #333; /* Dark text */
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Features Section */
-.features-section {
-  text-align: center;
-  padding: 60px 20px;
-  background-color: #f9f9f9;
+.hero-btn:hover,
+.cta-btn:hover,
+.login-btn:hover {
+  background-color: #e0b800; /* Darker yellow on hover */
+  transform: translateY(-3px);
 }
 
-.features-section h3 {
-  font-size: 2.8rem;
-  margin-bottom: 40px;
-  color: #333;
-}
-
-.feature-items {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 40px;
-}
-
-.feature-item {
-  flex: 1 1 250px;
-  background-color: #fff;
-  padding: 30px;
-  margin: 10px;
-  border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: left;
-}
-
-.feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
-}
-
-.feature-item h4 {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-  color: #0c0d0e;
-}
-
-.feature-item p {
-  font-size: 1.1rem;
-  color: #555;
-}
-
-/* Call-to-Action Section */
+/* CTA Section */
 .cta-section {
   text-align: center;
-  padding: 50px 20px;
-  background-color: #9ea6ae;
-  color: white;
+  padding: 60px 20px;
+  background-color: #d3d3d3; /* Ash background */
+  color: #333; /* Dark text for contrast */
 }
 
 .cta-section h2 {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  color: #333; /* Dark color */
   margin-bottom: 20px;
-  font-weight: 500;
 }
 
-.cta-section p {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
+.cta-text {
+  font-size: 1.2rem;
+  color: #555; /* Lighter gray for text */
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.cta-btn {
+  background-color: #ffcc00; /* Bright yellow */
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333; /* Dark text */
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #e0b800;
+  transform: translateY(-3px);
 }
 
 /* Footer */
 .footer {
   text-align: center;
   padding: 20px;
-  background-color: #222;
-  color: #fff;
+  background-color: #333; /* Dark gray */
+  color: #ffcc00; /* Yellow text */
   font-size: 0.9rem;
   border-top: 1px solid #555;
 }
 
-.footer p {
-  margin: 0;
+.footer a {
+  color: #ffcc00; /* Yellow links */
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero-text h2 {
-    font-size: 2.8rem;
+  .hero-content h1 {
+    font-size: 2.5rem; /* Adjusted size for smaller screens */
   }
 
-  .hero-text p {
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+
+  .cta-text {
     font-size: 1.1rem;
   }
 
   .cta-btn {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 12px 25px;
-  }
-
-  .features-section {
-    padding: 40px 10px;
-  }
-
-  .feature-items {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .cta-section h2 {
-    font-size: 2.5rem;
-  }
-
-  .cta-btn.cta-section-btn {
-    padding: 12px 30px;
-    font-size: 1.1rem;
   }
 }

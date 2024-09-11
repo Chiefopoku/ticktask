@@ -27,7 +27,6 @@ function App() {
   }, []);
 
   const handleLogin = () => {
-    // Google sign-in logic
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -75,7 +74,7 @@ function App() {
               />
             }
           />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route
@@ -96,8 +95,7 @@ function App() {
             <button className="close-modal" onClick={closeLoginModal}>
               &times;
             </button>
-            <Login onLogin={handleLogin} onClose={closeLoginModal} />{" "}
-            {/* Pass onClose */}
+            <Login onLogin={handleLogin} onClose={closeLoginModal} />
           </div>
         </div>
       )}

@@ -1,20 +1,21 @@
 /* General Navbar Styling */
 .navbar {
   background-color: #333;
-  padding: 15px;
+  padding: 0px;
+  margin: 0px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1000;
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
+  align-items: left;
   width: 100%;
 }
 

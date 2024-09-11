@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase"; // Firestore setup
 import {
   collection,
   addDoc,
-  query,
-  where,
-  onSnapshot,
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  where,
+  onSnapshot,
 } from "firebase/firestore";
+import { db } from "../firebase"; // Firestore setup
 import TaskInput from "./TaskInput";
 import TaskList from "./TaskList";
 import "./Dashboard.css"; // Assuming you have CSS for Dashboard styling
@@ -18,6 +18,34 @@ const Dashboard = ({ user, onLogout }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+
+  // Add task function
+  const addTask = async (taskName, dueDate, reminder) => {
+    try {
+      if (!taskName.trim()) {
+        throw new Error("Task name cannot be empty.");
+      }
+
+      const taskData = {
+        name: taskName,
+        completed: false,
+        userId: user.uid, // Make sure user ID is correctly added
+        createdAt: new Date(),
+        dueDate: dueDate || null,
+        reminder: reminder || null,
+      };
+
+      // Adding task to Firestore
+      await addDoc(collection(db, "tasks"), taskData);
+
+      console.log("Task added successfully:", taskData); // Log success for debugging
+    } catch (error) {
+      console.error("Error adding task:", error.message);
+      setError("Error adding task. Please try again.");
+    }
+  };
 
   // Fetch tasks for the authenticated user
   useEffect(() => {
@@ -26,7 +54,7 @@ const Dashboard = ({ user, onLogout }) => {
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        let tasksArr = [];
+        const tasksArr = [];
         querySnapshot.forEach((doc) => {
           tasksArr.push({ ...doc.data(), id: doc.id });
         });
@@ -39,31 +67,19 @@ const Dashboard = ({ user, onLogout }) => {
         // Calculate task completion progress
         const completedTasks = tasksArr.filter((task) => task.completed).length;
         setProgress((completedTasks / tasksArr.length) * 100);
+        setLoading(false); // Stop loading when tasks are fetched
       },
       (error) => {
         console.error("Error fetching tasks: ", error);
         setError("Error fetching tasks. Please try again.");
+        setLoading(false);
       }
     );
 
     return () => unsubscribe();
   }, [user.uid]);
 
-  const addTask = async (taskName, dueDate, reminder) => {
-    try {
-      await addDoc(collection(db, "tasks"), {
-        name: taskName,
-        completed: false,
-        dueDate: dueDate || null,
-        reminder: reminder || null,
-        userId: user.uid,
-      });
-    } catch (error) {
-      console.error("Error adding task: ", error);
-      setError("Error adding task. Please try again.");
-    }
-  };
-
+  // Toggle task completion
   const toggleTaskCompletion = async (taskId, completed) => {
     const taskDocRef = doc(db, "tasks", taskId);
     try {
@@ -74,6 +90,7 @@ const Dashboard = ({ user, onLogout }) => {
     }
   };
 
+  // Delete task
   const deleteTask = async (taskId) => {
     const taskDocRef = doc(db, "tasks", taskId);
     try {
@@ -84,39 +101,78 @@ const Dashboard = ({ user, onLogout }) => {
     }
   };
 
+  // Filter tasks based on filter state
+  const getFilteredTasks = () => {
+    if (filter === "completed") {
+      return tasks.filter((task) => task.completed);
+    }
+    if (filter === "pending") {
+      return tasks.filter((task) => !task.completed);
+    }
+    return tasks;
+  };
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
         <h1>Welcome, {user.displayName}</h1>
-        <button className="logout-btn" onClick={onLogout}>
-          Logout
-        </button>
       </header>
 
       {error && <p className="error-message">{error}</p>}
 
-      <TaskInput addTask={addTask} />
+      {/* Loading Indicator */}
+      {loading ? (
+        <div className="loading-spinner">Loading tasks...</div>
+      ) : (
+        <>
+          {/* Task Input Form */}
+          <TaskInput addTask={addTask} />
 
-      <section className="task-section">
-        <h2>Your Tasks</h2>
+          <section className="task-section">
+            <h2>Your Tasks</h2>
 
-        {/* Task Completion Progress Bar */}
-        <div className="progress-bar-container">
-          <div className="progress-bar" style={{ width: `${progress}%` }}>
-            {progress.toFixed(0)}% Completed
-          </div>
-        </div>
+            {/* Filter Buttons */}
+            <div className="filter-buttons">
+              <button
+                className={filter === "all" ? "active" : ""}
+                onClick={() => setFilter("all")}
+              >
+                All
+              </button>
+              <button
+                className={filter === "completed" ? "active" : ""}
+                onClick={() => setFilter("completed")}
+              >
+                Completed
+              </button>
+              <button
+                className={filter === "pending" ? "active" : ""}
+                onClick={() => setFilter("pending")}
+              >
+                Pending
+              </button>
+            </div>
 
-        {tasks.length > 0 ? (
-          <TaskList
-            tasks={tasks}
-            toggleTaskCompletion={toggleTaskCompletion}
-            deleteTask={deleteTask}
-          />
-        ) : (
-          <p>No tasks yet. Add a new one!</p>
-        )}
-      </section>
+            {/* Task Completion Progress Bar */}
+            <div className="progress-bar-container">
+              <div className="progress-bar" style={{ width: `${progress}%` }}>
+                {progress.toFixed(0)}% Completed
+              </div>
+            </div>
+
+            {/* Task List */}
+            {getFilteredTasks().length > 0 ? (
+              <TaskList
+                tasks={getFilteredTasks()}
+                toggleTaskCompletion={toggleTaskCompletion}
+                deleteTask={deleteTask}
+              />
+            ) : (
+              <p>No tasks yet. Add a new one!</p>
+            )}
+          </section>
+        </>
+      )}
     </div>
   );
 };

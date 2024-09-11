@@ -1,10 +1,47 @@
 /* TaskList Styles */
+.task-list-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-list-header {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.task-list-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 .task-list {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
 
-.task-list .task-item:not(:last-child) {
-  margin-bottom: 15px;
+.task-list li {
+  margin-bottom: 10px;
+}
+
+.no-tasks-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Loading Spinner Styles */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #007bff;
 }

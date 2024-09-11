@@ -1,7 +1,7 @@
 /* General Dashboard Layout */
 .dashboard-container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 100px auto;
   padding: 20px;
   background-color: #f4f4f4; /* Ash background for the whole dashboard */
   color: #333; /* Text color to ensure good contrast */

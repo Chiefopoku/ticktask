@@ -20,6 +20,7 @@ function App() {
   const [theme, setTheme] = useState("light");
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // Check authentication state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -31,6 +32,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // Handle Google login
   const handleLogin = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
@@ -43,15 +45,18 @@ function App() {
       });
   };
 
+  // Handle logout
   const handleLogout = () => {
     auth.signOut();
     setUser(null);
   };
 
+  // Theme toggle
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
+  // Close login modal
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
@@ -68,12 +73,24 @@ function App() {
       <div className={`app ${theme} ${showLoginModal ? "blurred" : ""}`}>
         <Routes>
           {/* Default route is the landing page */}
-          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/"
+            element={
+              <LandingPage
+                isAuthenticated={!!user}
+                onLogin={() => setShowLoginModal(true)}
+                theme={theme}
+                toggleTheme={toggleTheme}
+              />
+            }
+          />
 
           {/* Other pages */}
           <Route path="/login" element={<Login />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/about" element={<AboutPage />} />
+
+          {/* Protected dashboard route */}
           <Route
             path="/dashboard"
             element={
@@ -82,11 +99,13 @@ function App() {
               </PrivateRoute>
             }
           />
+
           {/* Redirect any unknown routes back to landing page */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
 
+      {/* Login modal */}
       {showLoginModal && (
         <div className="modal-overlay" onClick={closeLoginModal}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>

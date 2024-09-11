@@ -67,7 +67,7 @@ h1 {
 .progress-bar {
   background-color: #f0b400; /* Yellow progress bar */
   color: white;
-  padding: 25px 0px;
+  padding: 25px 0;
   height: 24px;
   border-radius: 10px;
   transition: width 0.4s ease;

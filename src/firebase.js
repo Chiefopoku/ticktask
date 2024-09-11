@@ -3,13 +3,13 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect, // Import signInWithRedirect
+  signInWithRedirect,
   signInAnonymously,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase configuration
+// Firebase configuration from environment variables
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -30,7 +30,7 @@ export {
   db,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect, // Export signInWithRedirect
+  signInWithRedirect,
   signInAnonymously,
   signInWithEmailAndPassword,
 };

@@ -158,9 +158,16 @@ h1 {
 }
 
 @media (max-width: 768px) {
-  .task-input input,
-  .task-input button {
-    font-size: 0.9rem; /* Slightly smaller input and button text for smaller screens */
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  .task-section {
+    font-size: 14px;
+  }
+
+  .progress-bar {
+    height: 18px;
   }
 }
 

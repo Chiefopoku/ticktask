@@ -2,35 +2,51 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css"; // Assuming you have a separate CSS for header
 
-const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
+const Header = ({ isAuthenticated, onLogin, onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close the mobile menu when a link is clicked
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <header className="navbar">
       <div className="navbar-container">
         <h1 className="navbar-brand">
-          <Link to="/">TickTask</Link>
+          <Link to="/" onClick={closeMobileMenu}>
+            TickTask
+          </Link>
         </h1>
 
         <nav className={`nav ${isMobileMenuOpen ? "open" : ""}`}>
           <ul className="nav-links">
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" onClick={closeMobileMenu}>
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/features">Features</Link>
+              <Link to="/features" onClick={closeMobileMenu}>
+                Features
+              </Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/about" onClick={closeMobileMenu}>
+                About
+              </Link>
             </li>
 
             {isAuthenticated && (
               <li>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard" onClick={closeMobileMenu}>
+                  Dashboard
+                </Link>
               </li>
             )}
 
@@ -42,7 +58,13 @@ const Header = ({ isAuthenticated, onLogin, onLogout, theme, toggleTheme }) => {
               </li>
             ) : (
               <li>
-                <button className="logout-btn" onClick={onLogout}>
+                <button
+                  className="logout-btn"
+                  onClick={() => {
+                    onLogout();
+                    closeMobileMenu(); // Ensure the menu closes on logout
+                  }}
+                >
                   Logout
                 </button>
               </li>

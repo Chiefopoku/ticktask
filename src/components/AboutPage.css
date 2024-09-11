@@ -20,7 +20,7 @@
   font-size: 36px;
   font-weight: 700;
   color: #34495e; /* Dark grey-blue for heading */
-  text-align: center;
+  text-align: justify;
   margin-bottom: 20px;
 }
 
@@ -39,7 +39,7 @@
   font-size: 18px;
   line-height: 1.6;
   color: #555;
-  text-align: center;
+  text-align: left;
   margin-bottom: 30px;
 }
 
@@ -62,7 +62,7 @@
 .features-section ul {
   list-style-type: none;
   padding: 0;
-  text-align: left; /* Adjusts text alignment */
+  text-align: justify; /* Adjusts text alignment */
   margin: 0 auto; /* Centers the list */
   max-width: 850px; /* Optional: limits the width for better readability */
 }
@@ -74,7 +74,7 @@
   margin-bottom: 10px;
   border-radius: 6px;
   color: #34495e;
-  text-align: left; /* Ensures all text is aligned to the left */
+  text-align: justify; /* Ensures all text is aligned to the left */
   display: flex; /* Enables inline alignment of icon and text */
   align-items: center;
 }

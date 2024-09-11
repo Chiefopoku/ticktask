@@ -28,7 +28,9 @@ const Login = ({ onLogin, onClose }) => {
         onLogin(result.user);
         onClose();
       })
-      .catch((error) => setError(error.message));
+      .catch((error) =>
+        setError("Failed to sign in with Google. Please try again.")
+      );
   };
 
   // Anonymous login
@@ -38,7 +40,9 @@ const Login = ({ onLogin, onClose }) => {
         onLogin(result.user);
         onClose();
       })
-      .catch((error) => setError(error.message));
+      .catch((error) =>
+        setError("Failed to sign in as guest. Please try again.")
+      );
   };
 
   // Email/Password login
@@ -49,7 +53,11 @@ const Login = ({ onLogin, onClose }) => {
         onLogin(result.user);
         onClose();
       })
-      .catch((error) => setError(error.message));
+      .catch((error) => {
+        setError(
+          "Failed to sign in with email. Please check your credentials."
+        );
+      });
   };
 
   return (
@@ -97,31 +105,6 @@ const Login = ({ onLogin, onClose }) => {
           </div>
           <span>Sign in with Google</span>
         </button>
-
-        {/* Email/Password Login Form */}
-        <form onSubmit={handleEmailLogin} className="email-form">
-          <div className="input-group">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="login-button">
-            Sign in with Email
-          </button>
-        </form>
 
         {/* Anonymous Sign-in Button */}
         <button

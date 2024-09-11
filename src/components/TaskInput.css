@@ -89,6 +89,10 @@ select:focus {
     flex-direction: column;
   }
 
+  .task-input {
+    width: 90%;
+  }
+
   .add-btn,
   .clear-btn {
     width: 100%;

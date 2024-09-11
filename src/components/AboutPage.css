@@ -4,6 +4,14 @@
   color: #333; /* Dark text */
   font-family: "Poppins", sans-serif;
   padding: 40px 20px;
+  opacity: 0;
+  animation: fadeInPage 1s ease-in-out forwards;
+}
+
+@keyframes fadeInPage {
+  to {
+    opacity: 1;
+  }
 }
 
 .about-container {
@@ -13,6 +21,16 @@
   background-color: #fff; /* White background for the content */
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for elevation */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Title Styling */
@@ -22,6 +40,16 @@
   color: #34495e; /* Dark grey-blue for heading */
   text-align: justify;
   margin-bottom: 20px;
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slideInFromLeft 1s ease-in-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .about-container h2 {
@@ -32,6 +60,16 @@
   border-left: 4px solid #ffc107; /* Accent border */
   padding-left: 10px;
   text-align: left;
+  opacity: 0;
+  transform: translateX(30px);
+  animation: slideInFromRight 1s ease-in-out forwards;
+}
+
+@keyframes slideInFromRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Introduction Text */
@@ -41,6 +79,14 @@
   color: #555;
   text-align: left;
   margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeInText 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Sections */
@@ -56,6 +102,8 @@
   font-size: 16px;
   line-height: 1.7;
   color: #444;
+  opacity: 0;
+  animation: fadeInText 1.5s ease-in-out forwards;
 }
 
 /* Features List */
@@ -77,6 +125,16 @@
   text-align: justify; /* Ensures all text is aligned to the left */
   display: flex; /* Enables inline alignment of icon and text */
   align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUpList 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInUpList {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .features-section li strong {
@@ -93,7 +151,7 @@
 
 /* Get Started Button */
 .get-started-btn {
-  background-color: #ffc107; /* Light green */
+  background-color: #ffc107; /* Light yellow */
   color: #000000;
   padding: 12px 24px;
   font-size: 16px;
@@ -101,14 +159,15 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   display: block;
   margin: 20px auto 0;
   text-align: center;
 }
 
 .get-started-btn:hover {
-  background-color: #ebb207; /* Darker green on hover */
+  background-color: #ebb207; /* Darker yellow on hover */
+  transform: translateY(-3px); /* Adds lift on hover */
 }
 
 /* Responsive Design */

@@ -5,11 +5,30 @@
   border-radius: 10px;
   max-width: 1200px;
   margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .features-header {
   text-align: center;
   margin-bottom: 60px;
+  opacity: 0;
+  animation: slideInFromLeft 1s ease-in-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .features-header h1 {
@@ -17,6 +36,16 @@
   color: #2c3e50;
   margin-bottom: 20px;
   letter-spacing: 1.2px;
+  transform: translateX(-50px); /* Start the heading from the left */
+  opacity: 0;
+  animation: slideInFromLeft 1.2s ease-in-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0); /* End at normal position */
+  }
 }
 
 .features-header p {
@@ -26,6 +55,9 @@
   margin: 0 auto;
   line-height: 1.7;
   font-weight: 300;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeIn 1.2s ease-in-out forwards;
 }
 
 /* Features List */
@@ -33,6 +65,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 40px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards;
 }
 
 .feature-item {
@@ -42,6 +76,9 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 1.8s ease-in-out forwards;
 }
 
 .feature-item:hover {
@@ -52,6 +89,23 @@
 .feature-item img {
   width: 96px;
   margin-bottom: 25px;
+  opacity: 0;
+  transform: scale(0.8); /* Start smaller */
+  animation: growIn 2s ease-in-out forwards;
+}
+
+@keyframes growIn {
+  to {
+    opacity: 1;
+    transform: scale(1); /* Grow into normal size */
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .feature-item h2 {
@@ -59,6 +113,8 @@
   color: #34495e;
   margin-bottom: 15px;
   font-weight: 600;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
 }
 
 .feature-item p {
@@ -66,6 +122,8 @@
   color: #7f8c8d;
   line-height: 1.6;
   font-weight: 300;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
 }
 
 /* Specific Secure Data Icon Alignment Fix */
@@ -78,6 +136,8 @@
 .cta-section {
   text-align: center;
   margin-top: 60px;
+  opacity: 0;
+  animation: slideInUp 2s ease-in-out forwards;
 }
 
 .cta-section h2 {
@@ -94,12 +154,21 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .cta-btn:hover {
   background-color: #0056b3;
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Footer */
@@ -111,6 +180,14 @@
   margin-top: 60px;
   font-size: 14px;
   letter-spacing: 1px;
+  opacity: 0;
+  animation: fadeInFooter 2s ease-in-out forwards;
+}
+
+@keyframes fadeInFooter {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Responsive Design */

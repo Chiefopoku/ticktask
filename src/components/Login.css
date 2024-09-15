@@ -14,7 +14,7 @@
 
 /* Login Modal */
 .login-modal {
-  background-color: #fff;
+  background-color: #f3d16a;
   padding: 20px;
   border-radius: 8px;
   max-width: 400px;
@@ -22,6 +22,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
   text-align: center;
+  display: flex;
+  flex-direction: column; /* Ensures that contents are stacked vertically */
+  align-items: center; /* Ensures contents are centered horizontally */
 }
 
 /* Close Button */
@@ -35,25 +38,43 @@
   cursor: pointer;
 }
 
-/* Login Button Styles */
+/* Login Button */
 .login-button {
-  background-color: #007bff;
-  color: white;
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+  justify-content: center; /* Center content horizontally */
+  background-color: #4285f4; /* Google blue */
+  color: #fff;
   border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
-  width: 100%; /* Full width for mobile */
+  transition: background-color 0.3s ease;
+  margin-top: 20px; /* Adds some space between other elements */
+  width: 100%; /* Full width on mobile for better UX */
+}
+
+/* Adjustments for the Google Icon and Text */
+.login-button svg {
+  margin-right: 10px; /* Space between icon and text */
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #357ae8; /* Darker blue on hover */
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  margin-top: 15px;
+  text-align: center; /* Ensure error message is centered */
 }
 
 /* Input Fields */
 .input-group {
   margin-bottom: 15px;
+  width: 100%; /* Ensure input groups fill the width */
 }
 
 .input-group input {
@@ -70,12 +91,7 @@
   margin-right: 10px;
 }
 
-.error-message {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
+/* Responsive Styles */
 @media (max-width: 600px) {
   .login-modal {
     width: 100%;
@@ -85,5 +101,10 @@
   .login-button {
     font-size: 1rem;
     padding: 10px;
+    width: 100%; /* Full-width button for small screens */
+  }
+
+  .input-group input {
+    width: 100%; /* Full-width inputs for small screens */
   }
 }

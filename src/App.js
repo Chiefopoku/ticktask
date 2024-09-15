@@ -11,7 +11,7 @@ import FeaturesPage from "./components/FeaturesPage";
 import AboutPage from "./components/AboutPage";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import { auth, GoogleAuthProvider, signInWithPopup } from "./firebase";
+import { auth, GoogleAuthProvider, signInWithRedirect } from "./firebase"; // Use signInWithRedirect instead
 import Header from "./components/Header";
 import "./App.css";
 
@@ -20,7 +20,6 @@ function App() {
   const [theme, setTheme] = useState("light");
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // Persist user state across refreshes using local storage
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
@@ -30,23 +29,21 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        localStorage.setItem("user", JSON.stringify(user)); // Store user in local storage
+        localStorage.setItem("user", JSON.stringify(user));
       } else {
         setUser(null);
-        localStorage.removeItem("user"); // Remove user from local storage on logout
+        localStorage.removeItem("user");
       }
     });
     return () => unsubscribe();
   }, []);
 
-  // Handle Google login
+  // Handle Google login with redirect
   const handleLogin = () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        setUser(result.user);
-        setShowLoginModal(false);
-        localStorage.setItem("user", JSON.stringify(result.user)); // Store user in local storage
+    signInWithRedirect(auth, provider)
+      .then(() => {
+        // Redirect and sign-in will be handled after the redirect
       })
       .catch((error) => {
         console.error("Error during login:", error);
@@ -57,7 +54,7 @@ function App() {
   const handleLogout = () => {
     auth.signOut();
     setUser(null);
-    localStorage.removeItem("user"); // Remove user from local storage on logout
+    localStorage.removeItem("user");
   };
 
   // Theme toggle
@@ -65,7 +62,6 @@ function App() {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  // Close login modal
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
@@ -81,7 +77,6 @@ function App() {
       />
       <div className={`app ${theme} ${showLoginModal ? "blurred" : ""}`}>
         <Routes>
-          {/* Default route is the landing page */}
           <Route
             path="/"
             element={
@@ -93,13 +88,9 @@ function App() {
               />
             }
           />
-
-          {/* Other pages */}
           <Route path="/login" element={<Login />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/about" element={<AboutPage />} />
-
-          {/* Protected dashboard route */}
           <Route
             path="/dashboard"
             element={
@@ -108,13 +99,10 @@ function App() {
               </PrivateRoute>
             }
           />
-
-          {/* Redirect any unknown routes back to landing page */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
 
-      {/* Login modal */}
       {showLoginModal && (
         <div className="modal-overlay" onClick={closeLoginModal}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>

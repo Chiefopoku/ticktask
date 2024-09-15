@@ -6,6 +6,7 @@ import {
   signInWithRedirect,
   signInAnonymously,
   signInWithEmailAndPassword,
+  getRedirectResult,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -28,11 +29,12 @@ const db = getFirestore(app); // Firebase Firestore
 
 // Export necessary modules
 export {
-  auth,
+  auth, // Exporting initialized auth instance
   db,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   signInAnonymously,
   signInWithEmailAndPassword,
+  getRedirectResult,
 };

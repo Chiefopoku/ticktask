@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  auth,
+  auth, // Import the initialized `auth` instance
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,

@@ -140,6 +140,48 @@ body {
   }
 }
 
+/* Review Section */
+.review-section {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #fff;
+}
+
+.review-section h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 3vw;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.reviews-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.review {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  text-align: center;
+}
+
+.review-text {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.review-author {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
+
 /* Footer */
 .footer {
   font-family: "Poppins", sans-serif;
@@ -214,6 +256,11 @@ body {
 
   .cta-section h2 {
     font-size: 2rem;
+  }
+
+  .reviews-container {
+    flex-direction: column;
+    align-items: center;
   }
 
   .cta-text {

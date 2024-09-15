@@ -20,6 +20,36 @@ const LandingPage = ({ isAuthenticated, onLogin, theme, toggleTheme }) => {
         </div>
       </section>
 
+      {/* Review Section */}
+      <section className="review-section">
+        <h2>What Our Users Say</h2>
+        <div className="reviews-container">
+          <div className="review">
+            <p className="review-text">
+              "TickTask has completely transformed how I organize my daily
+              tasks. I can't imagine life without it!"
+            </p>
+            <p className="review-author">— Jane Doe</p>
+          </div>
+
+          <div className="review">
+            <p className="review-text">
+              "The perfect tool for managing both my personal and work projects.
+              Simple, yet powerful!"
+            </p>
+            <p className="review-author">— John Smith</p>
+          </div>
+
+          <div className="review">
+            <p className="review-text">
+              "I love how intuitive the interface is. It has made staying on top
+              of my tasks so much easier!"
+            </p>
+            <p className="review-author">— Emily Johnson</p>
+          </div>
+        </div>
+      </section>
+
       {/* Call-to-Action Section */}
       <section className="cta-section">
         <h2>Start Managing Your Tasks Like a Pro</h2>

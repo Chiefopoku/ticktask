@@ -45,12 +45,12 @@ body {
 }
 
 .hero-content h1 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 4vw;
   font-weight: 700;
   letter-spacing: 1.5px;
   margin-bottom: 20px;
-  color: #ffcc00;
+  color: #ffcc00 !important;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   opacity: 0;
   transform: translateY(-50px); /* Start the heading higher */
@@ -65,7 +65,7 @@ body {
 }
 
 .hero-subtext {
-  font-family: "Lora", serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
   margin-bottom: 40px;
   color: white;
@@ -145,14 +145,27 @@ body {
   font-family: "Poppins", sans-serif;
   text-align: center;
   padding: 20px;
-  background-color: #333;
-  color: #ffcc00;
+  background-color: #333; /* Dark background for contrast */
+  color: #ffc107; /* Yellow text color */
   font-size: 0.9rem;
   border-top: 1px solid #555;
-  opacity: 0;
-  animation: fadeInFooter 2s ease-in-out forwards;
 }
 
+.footer p {
+  margin: 5px 0;
+}
+
+.footer a {
+  color: #ffc107; /* Yellow color for the links */
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.footer a:hover {
+  color: #e0b800; /* Darker yellow on hover */
+  text-decoration: underline; /* Underline on hover */
+}
 @keyframes fadeInFooter {
   to {
     opacity: 1;
@@ -163,7 +176,7 @@ body {
 .hero-btn,
 .cta-btn,
 .login-btn {
-  background-color: #ffc107;
+  background-color: #ffc107 !important;
   color: #333;
   padding: 15px 40px;
   font-size: 1.2rem;
@@ -178,7 +191,7 @@ body {
 .hero-btn:hover,
 .cta-btn:hover,
 .login-btn:hover {
-  background-color: #e0b800;
+  background-color: #e0b800 !important;
   transform: translateY(-5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add a shadow for emphasis */
 }

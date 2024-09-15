@@ -16,16 +16,15 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
-} from "./firebase";
-import { isMobile } from "react-device-detect"; // Detect if user is on mobile
+} from "./firebase"; // Add signInWithRedirect
 import Header from "./components/Header";
+import { isMobile } from "react-device-detect"; // Import mobile detection
 import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("light");
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [error, setError] = useState(null); // State to store any login errors
 
   // Check authentication state
   useEffect(() => {
@@ -39,42 +38,41 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // Handle Google login with mobile detection
+  // Handle Google login
   const handleLogin = () => {
     const provider = new GoogleAuthProvider();
 
     if (isMobile) {
-      // Use signInWithRedirect for mobile devices
-      signInWithRedirect(auth, provider).catch((error) => {
-        setError("Failed to sign in on mobile. Please try again.");
-        console.error("Error during mobile login:", error);
-      });
+      // On mobile, use redirect since popups are more likely to be blocked
+      signInWithRedirect(auth, provider)
+        .then((result) => {
+          setUser(result.user);
+          setShowLoginModal(false);
+        })
+        .catch((error) => {
+          console.error("Error during mobile login:", error);
+        });
     } else {
-      // Use signInWithPopup for desktop
+      // Try popup login first on desktop, fallback to redirect if blocked
       signInWithPopup(auth, provider)
         .then((result) => {
           setUser(result.user);
           setShowLoginModal(false);
-          setError(null); // Clear any errors on successful login
         })
         .catch((error) => {
-          setError("Failed to sign in. Please try again.");
           console.error("Error during login:", error);
+          if (error.code === "auth/popup-blocked") {
+            // Fallback to redirect if popup is blocked
+            signInWithRedirect(auth, provider);
+          }
         });
     }
   };
 
   // Handle logout
   const handleLogout = () => {
-    auth
-      .signOut()
-      .then(() => {
-        setUser(null);
-      })
-      .catch((error) => {
-        setError("Failed to log out. Please try again.");
-        console.error("Error during logout:", error);
-      });
+    auth.signOut();
+    setUser(null);
   };
 
   // Theme toggle
@@ -85,7 +83,6 @@ function App() {
   // Close login modal
   const closeLoginModal = () => {
     setShowLoginModal(false);
-    setError(null); // Clear any errors when modal is closed
   };
 
   return (
@@ -140,8 +137,6 @@ function App() {
               &times;
             </button>
             <Login onLogin={handleLogin} onClose={closeLoginModal} />
-            {/* Display error message if login fails */}
-            {error && <p className="error-message">{error}</p>}
           </div>
         </div>
       )}

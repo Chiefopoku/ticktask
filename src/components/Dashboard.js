@@ -74,6 +74,8 @@ const Dashboard = ({ user, onLogout }) => {
 
   // Fetch tasks for the authenticated user and check for reminders
   useEffect(() => {
+    console.log("Fetching tasks for user:", user.uid); // Log the user ID
+
     const q = query(collection(db, "tasks"), where("userId", "==", user.uid));
 
     const unsubscribe = onSnapshot(
@@ -83,6 +85,8 @@ const Dashboard = ({ user, onLogout }) => {
         querySnapshot.forEach((doc) => {
           tasksArr.push({ ...doc.data(), id: doc.id });
         });
+
+        console.log("Fetched tasks:", tasksArr); // Log fetched tasks
 
         // Sort tasks by due date
         tasksArr.sort((a, b) => (a.dueDate > b.dueDate ? 1 : -1));
@@ -103,6 +107,7 @@ const Dashboard = ({ user, onLogout }) => {
               reminderTime > now &&
               (reminderTime - now) / (1000 * 60) <= 60
             ) {
+              console.log(`Triggering notification for task: ${task.name}`);
               triggerNotification(task.name, reminderTime);
             }
           }
@@ -123,6 +128,9 @@ const Dashboard = ({ user, onLogout }) => {
     const taskDocRef = doc(db, "tasks", taskId);
     try {
       await updateDoc(taskDocRef, { completed: !completed });
+      console.log(
+        `Task ${taskId} marked as ${!completed ? "completed" : "pending"}`
+      );
     } catch (error) {
       console.error("Error updating task: ", error);
       setError("Error updating task. Please try again.");
@@ -134,6 +142,7 @@ const Dashboard = ({ user, onLogout }) => {
     const taskDocRef = doc(db, "tasks", taskId);
     try {
       await deleteDoc(taskDocRef);
+      console.log(`Task ${taskId} deleted`);
     } catch (error) {
       console.error("Error deleting task: ", error);
       setError("Error deleting task. Please try again.");

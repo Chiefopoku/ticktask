@@ -12,7 +12,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  animation: fadeIn 1s ease-in-out; /* Page load animation */
+  animation: fadeIn 1s ease-in-out;
 }
 
 /* Fade-in animation */

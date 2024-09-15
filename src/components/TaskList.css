@@ -1,121 +1,116 @@
-/* TaskList Styles */
+/* General Task List Styling */
 .task-list-container {
-  margin-top: 20px;
+  background-color: #fff;
   padding: 20px;
-  background-color: #f9f9f9;
   border-radius: 10px;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.task-list-header {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Softer shadow for the container */
+  margin-top: 20px;
 }
 
 .task-list-header h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
+/* Task List Styles */
 .task-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .task-list li {
-  margin-bottom: 10px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
+.task-list li:hover {
+  background-color: #f0f0f0; /* Slightly darker background on hover */
+}
+
+/* Task Actions (Checkbox and Delete Button) */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Task List Empty State */
 .no-tasks-message {
   text-align: center;
   font-size: 1.2rem;
-  color: #999;
-  padding: 20px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  margin-top: 10px;
+  color: #888;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
 }
 
-/* Loading Spinner Styles */
+/* Loading Spinner */
 .loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  color: #007bff;
+  text-align: center;
+  font-size: 1.4rem;
+  color: #666;
+  margin-top: 20px;
 }
 
-/* Media Queries for Responsive Design */
-
-/* For tablets and smaller devices */
+/* Responsive Design for Task List */
 @media (max-width: 768px) {
-  .task-list-container {
-    padding: 15px;
-    margin-top: 15px;
-  }
-
-  .task-list-header h2 {
-    font-size: 1.3rem; /* Slightly smaller heading for tablets */
-  }
-
-  .no-tasks-message {
-    font-size: 1.1rem; /* Slightly smaller font size for the message */
-    padding: 15px; /* Reduced padding */
-  }
-
-  .loading-spinner {
-    font-size: 1.3rem; /* Smaller font size for the spinner */
-  }
-}
-
-/* For mobile devices (small screens) */
-@media (max-width: 480px) {
   .task-list-container {
     padding: 10px;
     margin-top: 10px;
   }
 
   .task-list-header h2 {
-    font-size: 1.2rem; /* Smaller heading for mobile devices */
+    font-size: 1.4rem; /* Smaller heading for mobile devices */
   }
 
   .task-list li {
-    margin-bottom: 8px; /* Reduced space between tasks for mobile */
+    margin-bottom: 12px;
+    flex-direction: column; /* Stack task content vertically on mobile */
+    align-items: flex-start;
   }
 
-  .no-ttasks-message {
-    font-size: 1rem; /* Smaller message font */
-    padding: 12px;
+  .task-actions {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-end;
   }
 
-  .loading-spinner {
-    font-size: 1.2rem; /* Even smaller font size for the spinner on mobile */
-  }
-}
-
-/* Extra Small Screens (e.g., very small mobile phones) */
-@media (max-width: 360px) {
-  .task-list-container {
-    padding: 8px; /* Further reduce padding */
-  }
-
-  .task-list-header h2 {
-    font-size: 1.1rem; /* Smaller heading for very small screens */
-  }
-
-  .task-list li {
-    margin-bottom: 5px; /* Tighter spacing between tasks */
-  }
-
-  .no-tasks-message {
-    font-size: 0.9rem; /* Smaller message font */
+  .task-actions button {
+    width: 48%;
     padding: 10px;
   }
 
-  .loading-spinner {
-    font-size: 1.1rem;
+  .no-tasks-message {
+    font-size: 1rem; /* Smaller message font for mobile */
+    padding: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .task-list-header h2 {
+    font-size: 1.2rem; /* Smaller heading for very small screens */
+  }
+
+  .task-list li {
+    margin-bottom: 8px;
+  }
+
+  .task-actions button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .no-tasks-message {
+    font-size: 0.9rem;
   }
 }

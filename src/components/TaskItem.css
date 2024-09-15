@@ -1,58 +1,120 @@
-/* Task Item Styles */
+/* Task Item General Styling */
 .task-item {
-  display: flex; /* Flexbox for alignment */
-  justify-content: space-between; /* Space between checkbox and delete button */
-  align-items: center; /* Vertical alignment */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px;
   margin-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 }
 
 .task-item.completed {
-  background-color: #e0ffe0;
+  background-color: #e0ffe0; /* Light green for completed tasks */
 }
 
+.task-item:hover {
+  background-color: #f0f0f0; /* Slightly darker on hover */
+}
+
+/* Task Information Section */
 .task-info {
   display: flex;
-  align-items: center; /* Align checkbox and text vertically */
-  gap: 10px; /* Spacing between checkbox and task name */
-  flex-grow: 1; /* Take up remaining space */
+  align-items: center;
+  flex: 1;
+  gap: 15px; /* Adds spacing between checkbox and task name */
 }
 
-/* Checkbox Styling */
+/* Task Checkbox */
 .checkbox-container {
   display: flex;
   align-items: center;
+  margin-right: 10px;
   cursor: pointer;
 }
 
 .checkbox-container input {
-  cursor: pointer;
-  margin-right: 10px; /* Add some space between checkbox and task text */
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
 }
 
+/* Task Name Styling */
 .task-name {
-  font-size: 16px;
+  font-size: 1.1rem;
   color: #333;
-  word-break: break-word;
-  flex-grow: 1; /* Task name will take the remaining space */
+  flex: 1;
+  max-width: 50%;
+  word-wrap: break-word;
+}
+
+.task-name.task-completed {
+  text-decoration: line-through;
+  color: #888; /* Gray color for completed tasks */
+}
+
+/* Task Due Date and Reminder Styling */
+.task-due-date,
+.task-reminder {
+  margin-left: 10px;
+  font-size: 0.85rem;
+  color: #555;
+  background-color: #f9f9f9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.task-due-date small,
+.task-reminder small {
+  font-size: 0.8rem;
+  color: #666;
 }
 
 /* Delete Button */
 .delete-btn {
   background-color: transparent;
   border: none;
-  font-size: 20px;
+  color: #ff6b6b;
   cursor: pointer;
-  color: #ff4d4d;
-  transition: transform 0.2s ease, color 0.3s ease;
-  margin-left: 10px; /* Add some space between task name and delete button */
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+  margin-left: 15px;
 }
 
 .delete-btn:hover {
-  color: #ff1a1a;
-  transform: scale(1.1);
+  color: #ff2e2e; /* Darker red on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-info {
+    margin-bottom: 10px;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .task-name {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .task-due-date,
+  .task-reminder {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    margin-top: 5px;
+  }
+
+  .delete-btn {
+    align-self: flex-end;
+    font-size: 1.3rem;
+  }
 }

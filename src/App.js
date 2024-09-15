@@ -11,13 +11,7 @@ import FeaturesPage from "./components/FeaturesPage";
 import AboutPage from "./components/AboutPage";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import {
-  auth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-} from "./firebase";
-import { isMobile } from "react-device-detect"; // Detect if user is on mobile
+import { auth, GoogleAuthProvider, signInWithPopup } from "./firebase";
 import Header from "./components/Header";
 import "./App.css";
 
@@ -25,56 +19,45 @@ function App() {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("light");
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [error, setError] = useState(null); // State to store any login errors
 
-  // Check authentication state
+  // Persist user state across refreshes using local storage
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
+        localStorage.setItem("user", JSON.stringify(user)); // Store user in local storage
       } else {
         setUser(null);
+        localStorage.removeItem("user"); // Remove user from local storage on logout
       }
     });
     return () => unsubscribe();
   }, []);
 
-  // Handle Google login with mobile detection
+  // Handle Google login
   const handleLogin = () => {
     const provider = new GoogleAuthProvider();
-
-    if (isMobile) {
-      // Use signInWithRedirect for mobile devices
-      signInWithRedirect(auth, provider).catch((error) => {
-        setError("Failed to sign in on mobile. Please try again.");
-        console.error("Error during mobile login:", error);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        setUser(result.user);
+        setShowLoginModal(false);
+        localStorage.setItem("user", JSON.stringify(result.user)); // Store user in local storage
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
       });
-    } else {
-      // Use signInWithPopup for desktop
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          setUser(result.user);
-          setShowLoginModal(false);
-          setError(null); // Clear any errors on successful login
-        })
-        .catch((error) => {
-          setError("Failed to sign in. Please try again.");
-          console.error("Error during login:", error);
-        });
-    }
   };
 
   // Handle logout
   const handleLogout = () => {
-    auth
-      .signOut()
-      .then(() => {
-        setUser(null);
-      })
-      .catch((error) => {
-        setError("Failed to log out. Please try again.");
-        console.error("Error during logout:", error);
-      });
+    auth.signOut();
+    setUser(null);
+    localStorage.removeItem("user"); // Remove user from local storage on logout
   };
 
   // Theme toggle
@@ -85,7 +68,6 @@ function App() {
   // Close login modal
   const closeLoginModal = () => {
     setShowLoginModal(false);
-    setError(null); // Clear any errors when modal is closed
   };
 
   return (
@@ -140,8 +122,6 @@ function App() {
               &times;
             </button>
             <Login onLogin={handleLogin} onClose={closeLoginModal} />
-            {/* Display error message if login fails */}
-            {error && <p className="error-message">{error}</p>}
           </div>
         </div>
       )}

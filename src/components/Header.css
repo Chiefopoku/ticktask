@@ -87,11 +87,11 @@
   color: #fff;
   font-size: 1.8rem;
   cursor: pointer;
-  padding-top: 15px;
+  padding-bottom: 7px;
 }
 
 .menu-icon {
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 /* Mobile Menu for smaller screens */

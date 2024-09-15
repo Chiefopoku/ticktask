@@ -5,14 +5,11 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signInAnonymously,
-  signInWithEmailAndPassword,
 } from "../firebase"; // Firebase auth methods
 import { isMobile } from "react-device-detect"; // Mobile detection library
 import "./Login.css"; // CSS import
 
 const Login = ({ onLogin, onClose }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   // Close modal when clicking outside
@@ -76,10 +73,10 @@ const Login = ({ onLogin, onClose }) => {
           Manage your tasks efficiently with TickTask. Sign in to continue.
         </p>
 
-        {/* Anonymous Sign-in Button */}
+        {/* Google Sign-in Button */}
         <button
-          className="login-button anonymous-login"
-          onClick={handleAnonymousLogin}
+          className="login-button google-login"
+          onClick={handleGoogleLogin}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -105,6 +102,14 @@ const Login = ({ onLogin, onClose }) => {
             />
           </svg>
           Sign in with Google
+        </button>
+
+        {/* Anonymous Sign-in Button */}
+        <button
+          className="login-button anonymous-login"
+          onClick={handleAnonymousLogin}
+        >
+          Continue as Guest
         </button>
 
         {/* Error Message Display */}

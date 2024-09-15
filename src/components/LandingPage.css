@@ -4,6 +4,7 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #f9f9f9;
   color: #333;
+  line-height: 1.6;
 }
 
 .landing-page {
@@ -14,7 +15,7 @@ body {
   animation: fadeIn 1s ease-in-out; /* Page load animation */
 }
 
-/* Fade-in animation for the whole page */
+/* Fade-in animation */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -30,8 +31,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("/public/images/StockCake-Planning daily tasks_1725825012.jpg")
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("/public/images/StockCake-Planning\ daily\ tasks_1725825012.jpg")
       no-repeat center/cover;
   color: white;
   text-align: center;
@@ -40,39 +41,35 @@ body {
 
 .hero-content {
   max-width: 800px;
-  padding: 20px;
+  padding: 40px;
   z-index: 1;
 }
 
 .hero-content h1 {
   font-family: "Poppins", sans-serif;
   font-size: 4vw;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 900;
+  letter-spacing: 2px;
   margin-bottom: 20px;
   color: #ffcc00 !important;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-  opacity: 0;
-  transform: translateY(-50px); /* Start the heading higher */
-  animation: slideDown 1.2s ease-in-out forwards; /* Slide-in animation */
-}
-
-@keyframes slideDown {
-  to {
-    opacity: 1;
-    transform: translateY(0); /* End position */
-  }
+  animation: slideDown 1.5s ease-in-out forwards;
 }
 
 .hero-subtext {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 40px;
-  color: white;
+  color: #e0e0e0;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  transform: translateY(50px); /* Start lower */
   animation: slideUp 1.5s ease-in-out forwards;
+}
+
+/* Subtle animations for elements */
+@keyframes slideDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
@@ -82,143 +79,12 @@ body {
   }
 }
 
-/* Hero Section Button Styling */
+/* Button */
 .hero-btn {
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.9);
   animation: growIn 1.8s ease-in-out forwards;
-}
-
-@keyframes growIn {
-  to {
-    opacity: 1;
-    transform: scale(1); /* Button grows into place */
-  }
-}
-
-/* Call-to-Action Section */
-.cta-section {
-  text-align: center;
-  padding: 50px 20px;
-  background-color: #d3d3d3;
-  animation: fadeIn 2s ease-in-out;
-}
-
-.cta-section h2 {
-  font-family: "Montserrat", sans-serif;
-  font-size: 3vw;
-  color: #333;
-  margin-bottom: 20px;
-  transform: translateX(-50px); /* Start from the left */
-  opacity: 0;
-  animation: slideInLeft 1.5s ease-in-out forwards;
-}
-
-@keyframes slideInLeft {
-  to {
-    transform: translateX(0); /* End position */
-    opacity: 1;
-  }
-}
-
-.cta-text {
-  font-family: "Lora", serif;
-  font-size: 1.1rem;
-  color: #555;
-  max-width: 600px;
-  margin: 0 auto 40px;
-  line-height: 1.6;
-  transform: translateX(50px); /* Start from the right */
-  opacity: 0;
-  animation: slideInRight 1.7s ease-in-out forwards;
-}
-
-@keyframes slideInRight {
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Review Section */
-.review-section {
-  text-align: center;
-  padding: 50px 20px;
-  background-color: #fff;
-}
-
-.review-section h2 {
-  font-family: "Montserrat", sans-serif;
-  font-size: 3vw;
-  color: #333;
-  margin-bottom: 40px;
-}
-
-.reviews-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-}
-
-.review {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
-  text-align: center;
-}
-
-.review-text {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.review-author {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
-}
-
-/* Footer */
-.footer {
-  font-family: "Poppins", sans-serif;
-  text-align: center;
-  padding: 20px;
-  background-color: #333; /* Dark background for contrast */
-  color: #ffc107; /* Yellow text color */
-  font-size: 0.9rem;
-  border-top: 1px solid #555;
-}
-
-.footer p {
-  margin: 5px 0;
-}
-
-.footer a {
-  color: #ffc107; /* Yellow color for the links */
-  text-decoration: none;
-  margin: 0 10px;
-  transition: color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-.footer a:hover {
-  color: #e0b800; /* Darker yellow on hover */
-  text-decoration: underline; /* Underline on hover */
-}
-@keyframes fadeInFooter {
-  to {
-    opacity: 1;
-  }
-}
-
-/* Button Hover Animation */
-.hero-btn,
-.cta-btn,
-.login-btn {
-  background-color: #ffc107 !important;
+  background-color: #ffcc00 !important;
   color: #333;
   padding: 15px 40px;
   font-size: 1.2rem;
@@ -230,46 +96,142 @@ body {
     box-shadow 0.3s ease;
 }
 
-.hero-btn:hover,
-.cta-btn:hover,
-.login-btn:hover {
-  background-color: #e0b800 !important;
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add a shadow for emphasis */
+.hero-btn:hover {
+  background-color: #e0b800;
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Call-to-Action Section */
+.cta-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f3d16a 0%, #ff7b00 100%);
+  color: #fff;
+  position: relative;
+}
+
+.cta-section h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 3.5vw;
+  font-weight: 900;
+  color: #333;
+  margin-bottom: 20px;
+  animation: slideInLeft 1.5s ease-in-out forwards;
+}
+
+.cta-text {
+  font-family: "Lora", serif;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.8;
+  color: #fff;
+  animation: fadeInUp 1.7s ease-in-out forwards;
+}
+
+.cta-btn {
+  background-color: #ffcc00 !important;
+  color: #333;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #e0b800;
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Review Section */
+.review-section {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+}
+
+.review-section h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 3.5vw;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.reviews-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.review {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.review:hover {
+  transform: translateY(-10px);
+}
+
+.review-text {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.review-author {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Footer */
+.footer {
+  background-color: #333;
+  color: #ffc107;
+  padding: 30px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.footer a {
+  color: #ffc107;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #e0b800;
+  text-decoration: underline;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero-content {
-    padding: 20px;
-  }
-
   .hero-content h1 {
     font-size: 2.5rem;
-  }
-
-  .hero-btn,
-  .cta-btn {
-    font-size: 1rem;
-    padding: 12px 25px;
   }
 
   .cta-section h2 {
     font-size: 2rem;
   }
 
-  .reviews-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .cta-text {
     font-size: 1rem;
   }
 
-  .cta-btn {
-    font-size: 1rem;
-    padding: 12px 25px;
+  .reviews-container {
+    flex-direction: column;
+    align-items: center;
   }
 }
 

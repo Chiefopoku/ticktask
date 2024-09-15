@@ -23,26 +23,50 @@ const Dashboard = ({ user, onLogout }) => {
 
   // Request notification permission
   useEffect(() => {
-    if (
-      Notification.permission !== "granted" &&
-      Notification.permission !== "denied"
-    ) {
-      Notification.requestPermission();
+    if ("Notification" in window) {
+      if (
+        Notification.permission !== "granted" &&
+        Notification.permission !== "denied"
+      ) {
+        Notification.requestPermission();
+      }
     }
   }, []);
 
-  // Function to trigger a notification
+  // Function to trigger a notification with safe checks
   const triggerNotification = (taskName, reminderTime) => {
-    const notificationTitle = `Reminder: ${taskName}`;
-    const notificationOptions = {
-      body: `Your task "${taskName}" is due by ${new Date(
-        reminderTime
-      ).toLocaleString()}`,
-      icon: "/path-to-icon/icon.png", // Optional: add your app icon path here
-    };
+    // Check if the Notification API is available in the browser
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+      return;
+    }
 
+    // Check if permission has been granted
     if (Notification.permission === "granted") {
+      const notificationTitle = `Reminder: ${taskName}`;
+      const notificationOptions = {
+        body: `Your task "${taskName}" is due by ${new Date(
+          reminderTime
+        ).toLocaleString()}`,
+        icon: "/path-to-icon/icon.png", // Optional: add your app icon path here
+      };
+
       new Notification(notificationTitle, notificationOptions);
+    } else if (Notification.permission !== "denied") {
+      // Request permission if it's not denied
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notificationTitle = `Reminder: ${taskName}`;
+          const notificationOptions = {
+            body: `Your task "${taskName}" is due by ${new Date(
+              reminderTime
+            ).toLocaleString()}`,
+            icon: "/path-to-icon/icon.png",
+          };
+
+          new Notification(notificationTitle, notificationOptions);
+        }
+      });
     }
   };
 

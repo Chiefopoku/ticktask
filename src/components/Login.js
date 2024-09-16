@@ -12,15 +12,20 @@ import "./Login.css"; // CSS import
 
 const Login = ({ onLogin, onClose }) => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(false); // Add loading state
 
   // Check if the user is returning from Google sign-in redirect on mobile
   useEffect(() => {
     const checkRedirectResult = async () => {
       try {
+        setLoading(true); // Start loading while checking
         const result = await getRedirectResult(auth);
         if (result) {
-          onLogin(result.user);
+          const user = result.user;
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken;
+          console.log("Google Access Token:", token);
+          onLogin(user); // Log the user in
           onClose(); // Close the modal after successful login
         }
       } catch (error) {
@@ -36,14 +41,14 @@ const Login = ({ onLogin, onClose }) => {
     // If on mobile, check for redirect result
     if (isMobile) {
       checkRedirectResult();
-    } else {
-      setLoading(false); // No need to check redirect result on non-mobile
     }
   }, [onLogin, onClose]);
 
-  // Google sign-in with mobile detection
+  // Google sign-in logic
   const handleGoogleLogin = () => {
     const provider = new GoogleAuthProvider();
+    provider.addScope("profile"); // Add profile scope
+    provider.addScope("email"); // Add email scope
 
     if (isMobile) {
       // Use redirect for Google login on mobile
@@ -55,7 +60,11 @@ const Login = ({ onLogin, onClose }) => {
       // Use popup for Google login on desktop
       signInWithPopup(auth, provider)
         .then((result) => {
-          onLogin(result.user);
+          const user = result.user;
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken;
+          console.log("Google Access Token:", token);
+          onLogin(user); // Log the user in
           onClose(); // Close the modal after successful login
         })
         .catch((error) => {
@@ -69,7 +78,7 @@ const Login = ({ onLogin, onClose }) => {
   const handleAnonymousLogin = () => {
     signInAnonymously(auth)
       .then((result) => {
-        onLogin(result.user);
+        onLogin(result.user); // Log the user in
         onClose(); // Close the modal after successful login
       })
       .catch((error) => {
@@ -92,7 +101,6 @@ const Login = ({ onLogin, onClose }) => {
           Manage your tasks efficiently with TickTask. Sign in to continue.
         </p>
 
-        {/* Loading state */}
         {loading ? (
           <p>Loading...</p>
         ) : (

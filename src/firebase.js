@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase configuration
+// Firebase configuration from environment variables
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -23,18 +23,18 @@ const firebaseConfig = {
 // Initialize Firebase app
 const app = initializeApp(firebaseConfig);
 
-// Initialize services
-const auth = getAuth(app); // Firebase Authentication
-const db = getFirestore(app); // Firebase Firestore
+// Initialize Firebase Authentication and Firestore services
+const auth = getAuth(app); // Initialize Firebase Authentication
+const db = getFirestore(app); // Initialize Firestore
 
-// Export necessary modules
+// Export necessary Firebase services and methods
 export {
-  auth, // Exporting initialized auth instance
-  db,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  signInAnonymously,
-  signInWithEmailAndPassword,
-  getRedirectResult,
+  auth, // Firebase Auth instance
+  db, // Firestore instance
+  GoogleAuthProvider, // Google Auth provider
+  signInWithPopup, // Sign-in with popup method
+  signInWithRedirect, // Sign-in with redirect method
+  signInAnonymously, // Anonymous sign-in method
+  signInWithEmailAndPassword, // Sign-in with email and password method
+  getRedirectResult, // Handle redirect sign-in result
 };

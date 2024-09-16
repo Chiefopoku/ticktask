@@ -11,12 +11,7 @@ import FeaturesPage from "./components/FeaturesPage";
 import AboutPage from "./components/AboutPage";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import {
-  auth,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
-} from "./firebase";
+import { auth, getRedirectResult } from "./firebase";
 import Header from "./components/Header";
 import "./App.css";
 
@@ -24,10 +19,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("light");
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [handlingRedirect, setHandlingRedirect] = useState(false);
   const initialLoad = useRef(true); // Use this to track the initial load
 
-  // Check for redirect result only on first load
+  // Handle authentication state and redirect results
   useEffect(() => {
     const checkRedirectResult = async () => {
       try {
@@ -36,14 +30,13 @@ function App() {
           const user = result.user;
           setUser(user);
           localStorage.setItem("user", JSON.stringify(user));
-          setHandlingRedirect(false);
+          setShowLoginModal(false); // Close the login modal
         }
       } catch (error) {
         console.error("Error handling redirect result:", error);
       }
     };
 
-    // Ensure this runs only on initial load
     if (initialLoad.current) {
       initialLoad.current = false;
       checkRedirectResult();
@@ -53,7 +46,7 @@ function App() {
       if (user) {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
-        setHandlingRedirect(false);
+        setShowLoginModal(false); // Close the login modal
       } else {
         setUser(null);
         localStorage.removeItem("user");
@@ -62,18 +55,6 @@ function App() {
 
     return () => unsubscribe();
   }, []);
-
-  // Handle Google login with redirect
-  const handleLogin = () => {
-    if (!user && !handlingRedirect) {
-      setHandlingRedirect(true); // Set the flag to prevent double execution
-      const provider = new GoogleAuthProvider();
-      signInWithRedirect(auth, provider).catch((error) => {
-        setHandlingRedirect(false); // Reset the flag if error occurs
-        console.error("Error during login:", error);
-      });
-    }
-  };
 
   // Handle logout
   const handleLogout = () => {
@@ -134,7 +115,7 @@ function App() {
             <button className="close-modal" onClick={closeLoginModal}>
               &times;
             </button>
-            <Login onLogin={handleLogin} onClose={closeLoginModal} />
+            <Login onLogin={setUser} onClose={closeLoginModal} />
           </div>
         </div>
       )}

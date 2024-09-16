@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  auth, // Import the initialized `auth` instance
+  auth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   signInAnonymously,
+  getRedirectResult,
 } from "../firebase"; // Firebase auth methods
 import { isMobile } from "react-device-detect"; // Mobile detection library
 import "./Login.css"; // CSS import
@@ -12,35 +13,45 @@ import "./Login.css"; // CSS import
 const Login = ({ onLogin, onClose }) => {
   const [error, setError] = useState(null);
 
-  // Close modal when clicking outside
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
+  // Check if the user is returning from Google sign-in redirect on mobile
+  useEffect(() => {
+    const checkRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          onLogin(result.user);
+          onClose(); // Close the modal after successful login
+        }
+      } catch (error) {
+        setError(
+          "Failed to complete Google sign-in redirect. Please try again."
+        );
+        console.error("Error during Google sign-in redirect:", error);
+      }
+    };
+
+    // If on mobile, check for redirect result
+    if (isMobile) {
+      checkRedirectResult();
     }
-  };
+  }, [onLogin, onClose]);
 
   // Google sign-in with mobile detection
   const handleGoogleLogin = () => {
     const provider = new GoogleAuthProvider();
 
     if (isMobile) {
-      // Handle Google login with redirect for mobile
-      signInWithRedirect(auth, provider)
-        .then(() => {
-          // The redirect and sign-in will be handled after the redirect.
-        })
-        .catch((error) => {
-          setError(
-            "Failed to sign in with Google on mobile. Please try again."
-          );
-          console.error("Mobile Google login error:", error);
-        });
+      // Use redirect for Google login on mobile
+      signInWithRedirect(auth, provider).catch((error) => {
+        setError("Failed to sign in with Google on mobile. Please try again.");
+        console.error("Mobile Google login error:", error);
+      });
     } else {
-      // Handle Google login with popup for desktop
+      // Use popup for Google login on desktop
       signInWithPopup(auth, provider)
         .then((result) => {
           onLogin(result.user);
-          onClose();
+          onClose(); // Close the modal after successful login
         })
         .catch((error) => {
           setError("Failed to sign in with Google. Please try again.");
@@ -54,7 +65,7 @@ const Login = ({ onLogin, onClose }) => {
     signInAnonymously(auth)
       .then((result) => {
         onLogin(result.user);
-        onClose();
+        onClose(); // Close the modal after successful login
       })
       .catch((error) => {
         setError("Failed to sign in as guest. Please try again.");
@@ -63,7 +74,10 @@ const Login = ({ onLogin, onClose }) => {
   };
 
   return (
-    <div className="login-modal-overlay" onClick={handleOverlayClick}>
+    <div
+      className="login-modal-overlay"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
       <div className="login-modal">
         <button className="close-modal" onClick={onClose}>
           &times;

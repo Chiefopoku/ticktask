@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { db } from "../firebase"; // Import Firestore
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   collection,
   addDoc,
@@ -9,240 +8,357 @@ import {
   query,
   where,
   onSnapshot,
+  serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
+import { db } from "../firebase";
 import TaskInput from "./TaskInput";
 import TaskList from "./TaskList";
-import "./Dashboard.css"; // Assuming you have CSS for Dashboard styling
+import { SearchIcon, BellIcon, AlertIcon, CalendarIcon, ListIcon, CheckIcon, UserIcon } from "./Icons";
+import { sortTasks, isOverdue, isDueToday, normalisePriority } from "./taskUtils";
 
-const Dashboard = ({ user, onLogout }) => {
+const FILTERS = [
+  { key: "all", label: "All" },
+  { key: "active", label: "Active" },
+  { key: "completed", label: "Done" },
+  { key: "overdue", label: "Overdue" },
+];
+
+const EMPTY_TEXT = {
+  all: "No tasks yet. Add your first one above.",
+  active: "Nothing left to do. Nice work!",
+  completed: "No completed tasks yet.",
+  overdue: "Nothing overdue. You're on track.",
+};
+
+// Reminders are shown while the app is open; look this far ahead when scheduling them.
+const REMINDER_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+const greeting = () => {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
+};
+
+const Dashboard = ({ user }) => {
   const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("due");
+  const [search, setSearch] = useState("");
+  const [now, setNow] = useState(() => new Date());
+  const [permission, setPermission] = useState(
+    typeof window !== "undefined" && "Notification" in window ? Notification.permission : "unsupported"
+  );
 
-  // Request notification permission
+  // Live task updates from Firestore.
   useEffect(() => {
-    if ("Notification" in window) {
-      if (
-        Notification.permission !== "granted" &&
-        Notification.permission !== "denied"
-      ) {
-        Notification.requestPermission();
-      }
-    }
-  }, []);
-
-  // Function to trigger a notification with safe checks
-  const triggerNotification = (taskName, reminderTime) => {
-    // Check if the Notification API is available in the browser
-    if (!("Notification" in window)) {
-      console.log("This browser does not support desktop notification");
-      return;
-    }
-
-    // Check if permission has been granted
-    if (Notification.permission === "granted") {
-      const notificationTitle = `Reminder: ${taskName}`;
-      const notificationOptions = {
-        body: `Your task "${taskName}" is due by ${new Date(
-          reminderTime
-        ).toLocaleString()}`,
-        icon: "/path-to-icon/icon.png", // Optional: add your app icon path here
-      };
-
-      new Notification(notificationTitle, notificationOptions);
-    } else if (Notification.permission !== "denied") {
-      // Request permission if it's not denied
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          const notificationTitle = `Reminder: ${taskName}`;
-          const notificationOptions = {
-            body: `Your task "${taskName}" is due by ${new Date(
-              reminderTime
-            ).toLocaleString()}`,
-            icon: "/path-to-icon/icon.png",
-          };
-
-          new Notification(notificationTitle, notificationOptions);
-        }
-      });
-    }
-  };
-
-  // Add task function
-  const addTask = async (taskName, dueDate, reminder) => {
-    try {
-      if (!taskName.trim()) {
-        throw new Error("Task name cannot be empty.");
-      }
-
-      const taskData = {
-        name: taskName,
-        completed: false,
-        userId: user.uid, // Make sure user ID is correctly added
-        createdAt: new Date(),
-        dueDate: dueDate || null,
-        reminder: reminder || null,
-      };
-
-      // Adding task to Firestore
-      await addDoc(collection(db, "tasks"), taskData);
-
-      console.log("Task added successfully:", taskData); // Log success for debugging
-    } catch (error) {
-      console.error("Error adding task:", error.message);
-      setError("Error adding task. Please try again.");
-    }
-  };
-
-  // Fetch tasks for the authenticated user and check for reminders
-  useEffect(() => {
-    console.log("Fetching tasks for user:", user.uid); // Log the user ID
-
     const q = query(collection(db, "tasks"), where("userId", "==", user.uid));
-
     const unsubscribe = onSnapshot(
       q,
-      (querySnapshot) => {
-        const tasksArr = [];
-        querySnapshot.forEach((doc) => {
-          tasksArr.push({ ...doc.data(), id: doc.id });
-        });
-
-        console.log("Fetched tasks:", tasksArr); // Log fetched tasks
-
-        // Sort tasks by due date
-        tasksArr.sort((a, b) => (a.dueDate > b.dueDate ? 1 : -1));
-
-        setTasks(tasksArr);
-
-        // Calculate task completion progress
-        const completedTasks = tasksArr.filter((task) => task.completed).length;
-        setProgress((completedTasks / tasksArr.length) * 100);
-        setLoading(false); // Stop loading when tasks are fetched
-
-        // Check for tasks with reminders within the next hour and trigger notifications
-        const now = new Date();
-        tasksArr.forEach((task) => {
-          if (task.reminder && !task.completed) {
-            const reminderTime = new Date(task.reminder);
-            if (
-              reminderTime > now &&
-              (reminderTime - now) / (1000 * 60) <= 60
-            ) {
-              console.log(`Triggering notification for task: ${task.name}`);
-              triggerNotification(task.name, reminderTime);
-            }
-          }
-        });
+      (snap) => {
+        setTasks(snap.docs.map((d) => ({ ...d.data(), id: d.id })));
+        setLoading(false);
       },
-      (error) => {
-        console.error("Error fetching tasks: ", error);
-        setError("Error fetching tasks. Please try again.");
+      () => {
+        setError("We couldn't load your tasks. Check your connection and refresh.");
         setLoading(false);
       }
     );
-
     return () => unsubscribe();
   }, [user.uid]);
 
-  // Toggle task completion
-  const toggleTaskCompletion = async (taskId, completed) => {
-    const taskDocRef = doc(db, "tasks", taskId);
+  // Keep "today" and "overdue" accurate while the page stays open.
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 60000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Schedule browser notifications for upcoming reminders.
+  useEffect(() => {
+    if (permission !== "granted") return undefined;
+    const timers = [];
+    const nowMs = Date.now();
+    tasks.forEach((task) => {
+      if (task.completed || !task.reminder) return;
+      const at = new Date(task.reminder).getTime();
+      const wait = at - nowMs;
+      if (wait > 0 && wait <= REMINDER_WINDOW_MS) {
+        timers.push(
+          setTimeout(() => {
+            try {
+              new Notification(`Reminder: ${task.name}`, {
+                body: "Time to tick this one off.",
+                tag: task.id,
+              });
+            } catch (e) {
+              /* some mobile browsers only allow notifications from a service worker */
+            }
+          }, wait)
+        );
+      }
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [tasks, permission]);
+
+  const enableNotifications = async () => {
+    if (!("Notification" in window)) return;
+    const result = await Notification.requestPermission();
+    setPermission(result);
+  };
+
+  const addTask = useCallback(
+    async ({ name, dueDate, dueTime, priority, reminder }) => {
+      try {
+        await addDoc(collection(db, "tasks"), {
+          name,
+          completed: false,
+          userId: user.uid,
+          createdAt: serverTimestamp(),
+          dueDate,
+          dueTime,
+          priority: normalisePriority(priority),
+          reminder,
+        });
+        setError(null);
+        return true;
+      } catch (e) {
+        setError("Couldn't add that task. Please try again.");
+        return false;
+      }
+    },
+    [user.uid]
+  );
+
+  const toggleTask = useCallback(async (id, completed) => {
     try {
-      await updateDoc(taskDocRef, { completed: !completed });
-      console.log(
-        `Task ${taskId} marked as ${!completed ? "completed" : "pending"}`
-      );
-    } catch (error) {
-      console.error("Error updating task: ", error);
-      setError("Error updating task. Please try again.");
+      await updateDoc(doc(db, "tasks", id), { completed: !completed });
+    } catch (e) {
+      setError("Couldn't update that task. Please try again.");
+    }
+  }, []);
+
+  const renameTask = useCallback(async (id, name) => {
+    try {
+      await updateDoc(doc(db, "tasks", id), { name });
+    } catch (e) {
+      setError("Couldn't rename that task. Please try again.");
+    }
+  }, []);
+
+  const deleteTask = useCallback(async (id) => {
+    try {
+      await deleteDoc(doc(db, "tasks", id));
+    } catch (e) {
+      setError("Couldn't delete that task. Please try again.");
+    }
+  }, []);
+
+  const clearCompleted = async () => {
+    const done = tasks.filter((t) => t.completed);
+    if (!done.length) return;
+    if (!window.confirm(`Delete ${done.length} completed task${done.length > 1 ? "s" : ""}?`)) return;
+    try {
+      const batch = writeBatch(db);
+      done.forEach((t) => batch.delete(doc(db, "tasks", t.id)));
+      await batch.commit();
+    } catch (e) {
+      setError("Couldn't clear completed tasks. Please try again.");
     }
   };
 
-  // Delete task
-  const deleteTask = async (taskId) => {
-    const taskDocRef = doc(db, "tasks", taskId);
-    try {
-      await deleteDoc(taskDocRef);
-      console.log(`Task ${taskId} deleted`);
-    } catch (error) {
-      console.error("Error deleting task: ", error);
-      setError("Error deleting task. Please try again.");
-    }
-  };
+  const stats = useMemo(() => {
+    const total = tasks.length;
+    const completed = tasks.filter((t) => t.completed).length;
+    return {
+      total,
+      completed,
+      active: total - completed,
+      today: tasks.filter((t) => !t.completed && isDueToday(t, now)).length,
+      overdue: tasks.filter((t) => isOverdue(t, now)).length,
+      pct: total ? Math.round((completed / total) * 100) : 0,
+    };
+  }, [tasks, now]);
 
-  // Filter tasks based on filter state
-  const getFilteredTasks = () => {
-    if (filter === "completed") {
-      return tasks.filter((task) => task.completed);
-    }
-    if (filter === "pending") {
-      return tasks.filter((task) => !task.completed);
-    }
-    return tasks;
-  };
+  const visible = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    const filtered = tasks.filter((t) => {
+      if (filter === "active" && t.completed) return false;
+      if (filter === "completed" && !t.completed) return false;
+      if (filter === "overdue" && !isOverdue(t, now)) return false;
+      if (q && !String(t.name || "").toLowerCase().includes(q)) return false;
+      return true;
+    });
+    return sortTasks(filtered, sortBy);
+  }, [tasks, filter, search, sortBy, now]);
+
+  const counts = { all: stats.total, active: stats.active, completed: stats.completed, overdue: stats.overdue };
+  const firstName = user.isAnonymous ? "" : (user.displayName || "").split(" ")[0];
 
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <h1>Welcome, {user.displayName}</h1>
-      </header>
+    <div className="container">
+      <div className="dash-head">
+        <div>
+          <h1>
+            {greeting()}
+            {firstName ? `, ${firstName}` : ""}
+          </h1>
+          <p>
+            {stats.active === 0
+              ? "You're all caught up."
+              : `You have ${stats.active} task${stats.active > 1 ? "s" : ""} to do${
+                  stats.today ? `, ${stats.today} due today` : ""
+                }.`}
+          </p>
+        </div>
+      </div>
 
-      {error && <p className="error-message">{error}</p>}
+      <div className="stats">
+        <div className="card stat">
+          <span className="tile sm violet">
+            <ListIcon />
+          </span>
+          <div>
+            <strong>{stats.total}</strong>
+            <span>Total</span>
+          </div>
+        </div>
+        <div className="card stat">
+          <span className="tile sm green">
+            <CheckIcon />
+          </span>
+          <div>
+            <strong>{stats.completed}</strong>
+            <span>Done</span>
+          </div>
+        </div>
+        <div className="card stat">
+          <span className="tile sm blue">
+            <CalendarIcon />
+          </span>
+          <div>
+            <strong>{stats.today}</strong>
+            <span>Due today</span>
+          </div>
+        </div>
+        <div className="card stat">
+          <span className="tile sm pink">
+            <AlertIcon />
+          </span>
+          <div>
+            <strong>{stats.overdue}</strong>
+            <span>Overdue</span>
+          </div>
+        </div>
+        <div className="card stat progress-card">
+          <div className="ring" style={{ "--p": stats.pct }}>
+            <span>{stats.pct}%</span>
+          </div>
+          <div>
+            <strong style={{ fontSize: "1.05rem" }}>Progress</strong>
+            <span>
+              {stats.completed} of {stats.total} complete
+            </span>
+          </div>
+        </div>
+      </div>
 
-      {/* Loading Indicator */}
+      {user.isAnonymous && (
+        <div className="banner">
+          <span className="tile sm slate">
+            <UserIcon />
+          </span>
+          <p>You're using a guest account. Your tasks stay in this browser; sign in with Google to use them anywhere.</p>
+        </div>
+      )}
+
+      {permission === "default" && (
+        <div className="banner">
+          <span className="tile sm amber">
+            <BellIcon />
+          </span>
+          <p>Turn on notifications to get reminders while TickTask is open.</p>
+          <button type="button" className="btn btn-sm" onClick={enableNotifications}>
+            Enable
+          </button>
+        </div>
+      )}
+
+      {error && (
+        <div className="banner error" role="alert">
+          <span className="tile sm pink">
+            <AlertIcon />
+          </span>
+          <p>{error}</p>
+          <button type="button" className="btn-text" onClick={() => setError(null)}>
+            Dismiss
+          </button>
+        </div>
+      )}
+
+      <TaskInput addTask={addTask} />
+
+      <div className="toolbar">
+        <div className="search">
+          <SearchIcon />
+          <label htmlFor="task-search" className="sr-only">
+            Search tasks
+          </label>
+          <input
+            id="task-search"
+            type="search"
+            placeholder="Search tasks"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="segmented" role="tablist" aria-label="Filter tasks">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              role="tab"
+              aria-selected={filter === f.key}
+              className={filter === f.key ? "active" : ""}
+              onClick={() => setFilter(f.key)}
+            >
+              {f.label} <span className="count">{counts[f.key]}</span>
+            </button>
+          ))}
+        </div>
+        <label htmlFor="sort" className="sr-only">
+          Sort tasks
+        </label>
+        <select id="sort" className="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="due">Sort: Due date</option>
+          <option value="priority">Sort: Priority</option>
+          <option value="newest">Sort: Newest</option>
+        </select>
+      </div>
+
       {loading ? (
-        <div className="loading-spinner">Loading tasks...</div>
+        <div className="spinner" role="status" aria-label="Loading tasks" />
       ) : (
         <>
-          {/* Task Input Form */}
-          <TaskInput addTask={addTask} />
-
-          <section className="task-section">
-            <h2>Your Tasks</h2>
-
-            {/* Filter Buttons */}
-            <div className="filter-buttons">
-              <button
-                className={filter === "all" ? "active" : ""}
-                onClick={() => setFilter("all")}
-              >
-                All
-              </button>
-              <button
-                className={filter === "completed" ? "active" : ""}
-                onClick={() => setFilter("completed")}
-              >
-                Completed
-              </button>
-              <button
-                className={filter === "pending" ? "active" : ""}
-                onClick={() => setFilter("pending")}
-              >
-                Pending
-              </button>
+          <TaskList
+            tasks={visible}
+            emptyText={search ? "No tasks match your search." : EMPTY_TEXT[filter]}
+            onToggle={toggleTask}
+            onDelete={deleteTask}
+            onRename={renameTask}
+          />
+          {tasks.length > 0 && (
+            <div className="list-foot">
+              <span>Double-click a task to rename it.</span>
+              {stats.completed > 0 && (
+                <button type="button" className="btn-text" onClick={clearCompleted}>
+                  Clear completed ({stats.completed})
+                </button>
+              )}
             </div>
-
-            {/* Task Completion Progress Bar */}
-            <div className="progress-bar-container">
-              <div className="progress-bar" style={{ width: `${progress}%` }}>
-                {progress.toFixed(0)}% Completed
-              </div>
-            </div>
-
-            {/* Task List */}
-            {getFilteredTasks().length > 0 ? (
-              <TaskList
-                tasks={getFilteredTasks()}
-                toggleTaskCompletion={toggleTaskCompletion}
-                deleteTask={deleteTask}
-              />
-            ) : (
-              <p>No tasks yet. Add a new one!</p>
-            )}
-          </section>
+          )}
         </>
       )}
     </div>

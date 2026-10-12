@@ -1,121 +1,117 @@
 import React, { useState } from "react";
-import "./TaskInput.css";
+import { REMINDER_OPTIONS, dueAt } from "./taskUtils";
 
 const TaskInput = ({ addTask }) => {
-  const [taskName, setTaskName] = useState("");
+  const [name, setName] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [reminder, setReminder] = useState("");
-  const [priority, setPriority] = useState("Low");
+  const [dueTime, setDueTime] = useState("");
+  const [priority, setPriority] = useState("medium");
+  const [reminderOffset, setReminderOffset] = useState("");
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!taskName.trim()) {
-      setError("Task name is required");
-      return;
-    }
-
-    let reminderDateTime = null;
-
-    // Only set reminder if user selected a valid reminder time
-    if (reminder && dueDate) {
-      try {
-        const selectedDate = new Date(dueDate);
-
-        if (isNaN(selectedDate.getTime())) {
-          throw new Error("Invalid due date");
-        }
-
-        const [hours, minutes] = reminder.split(":");
-        if (!hours || !minutes) {
-          throw new Error("Invalid reminder time");
-        }
-
-        selectedDate.setHours(parseInt(hours, 10));
-        selectedDate.setMinutes(parseInt(minutes, 10));
-
-        reminderDateTime = selectedDate.toISOString(); // Store as ISO string
-        console.log("Reminder set for:", reminderDateTime);
-      } catch (err) {
-        setError("Invalid reminder time or date");
-        return;
-      }
-    }
-
-    addTask(taskName, dueDate, reminderDateTime, priority);
-    setTaskName("");
+  const reset = () => {
+    setName("");
     setDueDate("");
-    setReminder("");
-    setPriority("Low");
+    setDueTime("");
+    setPriority("medium");
+    setReminderOffset("");
     setError(null);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const trimmed = name.trim();
+    if (!trimmed) {
+      setError("Give your task a name.");
+      return;
+    }
+
+    let reminder = null;
+    if (reminderOffset !== "") {
+      if (!dueDate) {
+        setError("Pick a due date to set a reminder.");
+        return;
+      }
+      const due = dueAt({ dueDate, dueTime: dueTime || "09:00" });
+      reminder = new Date(due.getTime() - Number(reminderOffset) * 60000).toISOString();
+    }
+
+    setSaving(true);
+    const ok = await addTask({
+      name: trimmed,
+      dueDate: dueDate || null,
+      dueTime: dueDate && dueTime ? dueTime : null,
+      priority,
+      reminder,
+    });
+    setSaving(false);
+    if (ok) reset();
+  };
+
   return (
-    <form className="task-input" onSubmit={handleSubmit}>
-      {error && <p className="error-message">{error}</p>}
-
-      <div className="input-group">
+    <form className="card add-task" onSubmit={handleSubmit}>
+      <div className="add-row">
+        <label htmlFor="task-name" className="sr-only">
+          Task name
+        </label>
         <input
+          id="task-name"
           type="text"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          placeholder="Task name *"
-          required
-        />
-      </div>
-
-      <div className="input-group">
-        <label htmlFor="due-date">Due Date:</label>
-        <input
-          type="date"
-          id="due-date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-        />
-      </div>
-
-      <div className="input-group">
-        <label htmlFor="reminder">Reminder Time:</label>
-        <input
-          type="time"
-          id="reminder"
-          value={reminder}
-          onChange={(e) => setReminder(e.target.value)}
-        />
-      </div>
-
-      <div className="input-group">
-        <label htmlFor="priority">Priority:</label>
-        <select
-          id="priority"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-      </div>
-
-      <div className="button-group">
-        <button type="submit" className="add-btn">
-          Add Task
-        </button>
-        <button
-          type="button"
-          className="clear-btn"
-          onClick={() => {
-            setTaskName("");
-            setDueDate("");
-            setReminder("");
-            setPriority("Low");
-            setError(null);
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            if (error) setError(null);
           }}
-        >
-          Clear
+          placeholder="What do you need to do?"
+          autoComplete="off"
+          maxLength={200}
+        />
+        <button type="submit" className="btn" disabled={saving}>
+          {saving ? "Adding…" : "Add task"}
         </button>
       </div>
+
+      <div className="add-options">
+        <div className="field">
+          <label htmlFor="due-date">Due date</label>
+          <input id="due-date" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+        </div>
+        <div className="field">
+          <label htmlFor="due-time">Time</label>
+          <input
+            id="due-time"
+            type="time"
+            value={dueTime}
+            onChange={(e) => setDueTime(e.target.value)}
+            disabled={!dueDate}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="priority">Priority</label>
+          <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor="reminder">Reminder</label>
+          <select id="reminder" value={reminderOffset} onChange={(e) => setReminderOffset(e.target.value)}>
+            {REMINDER_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {error && (
+        <p className="error-text" role="alert">
+          {error}
+        </p>
+      )}
     </form>
   );
 };

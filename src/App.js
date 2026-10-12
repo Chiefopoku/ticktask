@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useNavigate,
+  useLocation,
 } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
@@ -11,116 +13,154 @@ import FeaturesPage from "./components/FeaturesPage";
 import AboutPage from "./components/AboutPage";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import { auth, getRedirectResult } from "./firebase";
 import Header from "./components/Header";
-import "./App.css";
+import Footer from "./components/Footer";
+import { auth, getRedirectResult } from "./firebase";
 
-function App() {
-  const [user, setUser] = useState(null);
-  const [theme, setTheme] = useState("light");
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const initialLoad = useRef(true); // Use this to track the initial load
+// Light/dark theme: remembers the user's choice, otherwise follows the system.
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem("ticktask-theme");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch (e) {
+    /* storage unavailable */
+  }
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
 
-  // Handle authentication state and redirect results
+function ScrollToTop() {
+  const { pathname } = useLocation();
   useEffect(() => {
-    const checkRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const user = result.user;
-          setUser(user);
-          localStorage.setItem("user", JSON.stringify(user));
-          setShowLoginModal(false); // Close the login modal
-        }
-      } catch (error) {
-        console.error("Error handling redirect result:", error);
-      }
-    };
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
-    if (initialLoad.current) {
-      initialLoad.current = false;
-      checkRedirectResult();
+function AppShell() {
+  const [user, setUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [theme, setTheme] = useState(getInitialTheme);
+  const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem("ticktask-theme", theme);
+    } catch (e) {
+      /* storage unavailable */
     }
+  }, [theme]);
 
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-        setShowLoginModal(false); // Close the login modal
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-      }
+  // Firebase keeps the session; wait for it before deciding where to send the user.
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result && result.user) navigate("/dashboard");
+      })
+      .catch(() => {
+        /* no redirect in progress */
+      });
+
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      setUser(u);
+      setAuthReady(true);
     });
-
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
-  // Handle logout
-  const handleLogout = () => {
-    auth.signOut();
-    setUser(null);
-    localStorage.removeItem("user");
-  };
+  const openLogin = useCallback(() => setShowLogin(true), []);
+  const closeLogin = useCallback(() => setShowLogin(false), []);
 
-  // Theme toggle
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
+  const handleSignedIn = useCallback(() => {
+    setShowLogin(false);
+    navigate("/dashboard");
+  }, [navigate]);
 
-  const closeLoginModal = () => {
-    setShowLoginModal(false);
-  };
+  const handleLogout = useCallback(async () => {
+    await auth.signOut();
+    navigate("/");
+  }, [navigate]);
+
+  const toggleTheme = useCallback(
+    () => setTheme((t) => (t === "light" ? "dark" : "light")),
+    []
+  );
+
+  useEffect(() => {
+    if (!showLogin) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") setShowLogin(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showLogin]);
+
+  const isAuthenticated = !!user;
 
   return (
-    <Router>
+    <>
+      <ScrollToTop />
       <Header
-        isAuthenticated={!!user}
-        onLogin={() => setShowLoginModal(true)}
+        user={user}
+        onLogin={openLogin}
         onLogout={handleLogout}
         theme={theme}
         toggleTheme={toggleTheme}
       />
-      <div className={`app ${theme} ${showLoginModal ? "blurred" : ""}`}>
+      <main>
         <Routes>
           <Route
             path="/"
+            element={<LandingPage isAuthenticated={isAuthenticated} onLogin={openLogin} />}
+          />
+          <Route
+            path="/features"
+            element={<FeaturesPage isAuthenticated={isAuthenticated} onLogin={openLogin} />}
+          />
+          <Route path="/about" element={<AboutPage />} />
+          <Route
+            path="/login"
             element={
-              <LandingPage
-                isAuthenticated={!!user}
-                onLogin={() => setShowLoginModal(true)}
-                theme={theme}
-                toggleTheme={toggleTheme}
-              />
+              isAuthenticated ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <div className="login-page">
+                  <Login onSignedIn={handleSignedIn} />
+                </div>
+              )
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/features" element={<FeaturesPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute user={user}>
-                <Dashboard user={user} onLogout={handleLogout} />
+              <PrivateRoute user={user} authReady={authReady}>
+                <Dashboard user={user} />
               </PrivateRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
+      </main>
+      <Footer />
 
-      {showLoginModal && (
-        <div className="modal-overlay" onClick={closeLoginModal}>
-          <div className="login-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal" onClick={closeLoginModal}>
-              &times;
-            </button>
-            <Login onLogin={setUser} onClose={closeLoginModal} />
+      {showLogin && (
+        <div className="modal-overlay" onClick={closeLogin} role="presentation">
+          <div onClick={(e) => e.stopPropagation()} role="presentation">
+            <Login onSignedIn={handleSignedIn} onClose={closeLogin} />
           </div>
         </div>
       )}
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <AppShell />
+    </Router>
+  );
+}

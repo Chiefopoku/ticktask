@@ -3,23 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>TickTask</title>
-
-    <!-- Add a favicon for your app if desired -->
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-
-    <!-- Include external styles or fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>TickTask | Simple task manager with reminders</title>
+    <meta name="description" content="TickTask is a simple, fast task manager with due dates, priorities, reminders and real-time sync. Built with React and Firebase by Emmanuel Opoku-Adjei." />
+    <meta name="theme-color" content="#6d4aff" />
+    <meta property="og:title" content="TickTask | Simple task manager" />
+    <meta property="og:description" content="Plan less. Tick more. Tasks, due dates, priorities and reminders in one clean list." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      // Apply the saved or system theme before React loads, to avoid a flash.
+      (function () {
+        try {
+          var t = localStorage.getItem("ticktask-theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
-    <!-- The root element where your React app will be rendered -->
+    <noscript>You need to enable JavaScript to run TickTask.</noscript>
     <div id="root"></div>
-
-    <!-- This script will be replaced by your React app bundle -->
-    <noscript>You need to enable JavaScript to run this app.</noscript>
   </body>
 </html>

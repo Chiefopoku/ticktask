@@ -1,78 +1,173 @@
 import React from "react";
-import "./LandingPage.css";
+import { Link } from "react-router-dom";
+import {
+  CheckIcon,
+  CalendarIcon,
+  BellIcon,
+  FlagIcon,
+  SyncIcon,
+  ChartIcon,
+  ShieldIcon,
+  ListIcon,
+  UserIcon,
+} from "./Icons";
 
-const LandingPage = ({ isAuthenticated, onLogin, theme, toggleTheme }) => {
+const PreviewRow = ({ done, text, pill, pillClass }) => (
+  <div className={`preview-row ${done ? "done" : ""}`}>
+    <span className="fake-check">{done && <CheckIcon />}</span>
+    <span className="t">{text}</span>
+    <span className={`pill ${pillClass}`}>{pill}</span>
+  </div>
+);
+
+const LandingPage = ({ isAuthenticated, onLogin }) => {
+  const PrimaryCta = ({ children }) =>
+    isAuthenticated ? (
+      <Link to="/dashboard" className="btn">
+        Open my tasks
+      </Link>
+    ) : (
+      <button type="button" className="btn" onClick={onLogin}>
+        {children}
+      </button>
+    );
+
   return (
-    <div className={`landing-page ${theme}`}>
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1>Organize. Achieve. Succeed.</h1>
-          <p className="hero-subtext">
-            Simplify your life and increase your productivity with TickTask.
-            Your tasks, deadlines, and goals — all in one place.
-          </p>
-          {!isAuthenticated && (
-            <button className="cta-btn hero-btn" onClick={onLogin}>
-              Get Started for Free
-            </button>
-          )}
+    <>
+      <section className="hero">
+        <div className="container hero-grid">
+          <div>
+            <span className="eyebrow">Simple task management</span>
+            <h1>
+              Plan less. <span className="grad-text">Tick more.</span>
+            </h1>
+            <p className="lead">
+              TickTask keeps your to-dos, deadlines and priorities in one clean list, with
+              reminders that nudge you before things slip.
+            </p>
+            <div className="hero-ctas">
+              <PrimaryCta>Get started free</PrimaryCta>
+              <Link to="/features" className="btn btn-ghost">
+                See features
+              </Link>
+            </div>
+            <ul className="hero-points">
+              <li>
+                <CheckIcon /> Free to use
+              </li>
+              <li>
+                <ShieldIcon /> Sign in with Google
+              </li>
+              <li>
+                <SyncIcon /> Syncs in real time
+              </li>
+            </ul>
+          </div>
+
+          <div className="preview" aria-hidden="true">
+            <div className="preview-head">
+              <div>
+                <small className="muted">Today</small>
+                <br />
+                <strong>4 tasks &middot; 2 done</strong>
+              </div>
+              <div className="ring" style={{ "--p": 50 }}>
+                <span>50%</span>
+              </div>
+            </div>
+            <PreviewRow done text="Submit lab report" pill="High" pillClass="high" />
+            <PreviewRow done text="Reply to advisor" pill="Medium" pillClass="medium" />
+            <PreviewRow text="Book flight home" pill="Due today" pillClass="today" />
+            <PreviewRow text="Read two papers" pill="Low" pillClass="low" />
+            <div className="float-chip">
+              <span className="tile sm violet">
+                <BellIcon />
+              </span>
+              <div>
+                <strong>Reminder: Book flight home</strong>
+                <br />
+                <small className="muted">Due in 1 hour</small>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Review Section */}
-      <section className="review-section">
-        <h2>What Our Users Say</h2>
-        <div className="reviews-container">
-          <div className="review">
-            <p className="review-text">
-              "TickTask has completely transformed how I organize my daily
-              tasks. I can't imagine life without it!"
-            </p>
-            <p className="review-author">— Jane Doe</p>
+      <section>
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">Why TickTask</span>
+            <h2>Everything you need to stay on top of things</h2>
+            <p>No clutter, no learning curve. Just the tools that help you finish.</p>
           </div>
-
-          <div className="review">
-            <p className="review-text">
-              "The perfect tool for managing both my personal and work projects.
-              Simple, yet powerful!"
-            </p>
-            <p className="review-author">— John Smith</p>
-          </div>
-
-          <div className="review">
-            <p className="review-text">
-              "I love how intuitive the interface is. It has made staying on top
-              of my tasks so much easier!"
-            </p>
-            <p className="review-author">— Emily Johnson</p>
+          <div className="grid-3">
+            <article className="card feature-card">
+              <span className="tile violet">
+                <ListIcon />
+              </span>
+              <h3>Quick capture</h3>
+              <p>Add a task in seconds, then edit it inline whenever plans change.</p>
+            </article>
+            <article className="card feature-card">
+              <span className="tile pink">
+                <CalendarIcon />
+              </span>
+              <h3>Due dates and reminders</h3>
+              <p>Set a date and time, and get a browser notification before it is due.</p>
+            </article>
+            <article className="card feature-card">
+              <span className="tile amber">
+                <FlagIcon />
+              </span>
+              <h3>Priorities that matter</h3>
+              <p>Mark tasks high, medium or low, and sort so the important ones rise to the top.</p>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* Call-to-Action Section */}
-      <section className="cta-section">
-        <h2>Start Managing Your Tasks Like a Pro</h2>
-        <p className="cta-text">
-          Boost productivity, stay organized, and never miss a deadline again.
-          Join TickTask now!
-        </p>
-        {!isAuthenticated && (
-          <button className="cta-btn" onClick={onLogin}>
-            Join Now
-          </button>
-        )}
+      <section className="alt-bg">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">How it works</span>
+            <h2>Three steps to a calmer day</h2>
+          </div>
+          <div className="grid-3 steps">
+            <article className="card step">
+              <span className="tile violet">
+                <UserIcon />
+              </span>
+              <h3>Sign in</h3>
+              <p>Use your Google account, or try it instantly as a guest.</p>
+            </article>
+            <article className="card step">
+              <span className="tile pink">
+                <ListIcon />
+              </span>
+              <h3>Add your tasks</h3>
+              <p>Give each one a due date, a priority and an optional reminder.</p>
+            </article>
+            <article className="card step">
+              <span className="tile green">
+                <ChartIcon />
+              </span>
+              <h3>Tick them off</h3>
+              <p>Watch your progress ring fill up as you work through the list.</p>
+            </article>
+          </div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2024 TickTask. All rights reserved.</p>
-        <p>
-          <a href="/about">About</a> | <a href="/features">Features</a> |{" "}
-          <a href="/privacy">Privacy Policy</a>
-        </p>
-      </footer>
-    </div>
+      <section>
+        <div className="container">
+          <div className="cta-band">
+            <h2>Ready to get organised?</h2>
+            <p>It takes less than a minute to set up.</p>
+            <PrimaryCta>Start for free</PrimaryCta>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 

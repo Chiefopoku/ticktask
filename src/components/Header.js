@@ -1,80 +1,102 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./Header.css"; // Assuming you have a separate CSS for header
+import { Link, NavLink } from "react-router-dom";
+import { LogoIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon } from "./Icons";
 
-const Header = ({ isAuthenticated, onLogin, onLogout }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Toggle mobile menu
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  // Close the mobile menu when a link is clicked
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+const Header = ({ user, onLogin, onLogout, theme, toggleTheme }) => {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+  const initial = user && !user.isAnonymous && user.displayName ? user.displayName.charAt(0).toUpperCase() : "G";
 
   return (
-    <header className="navbar">
-      <div className="navbar-container">
-        <h1 className="navbar-brand">
-          <Link to="/" onClick={closeMobileMenu}>
-            TickTask
-          </Link>
-        </h1>
+    <header className="site-header">
+      <div className="container nav-bar">
+        <Link to="/" className="brand" onClick={close}>
+          <span className="brand-mark">
+            <LogoIcon />
+          </span>
+          TickTask
+        </Link>
 
-        <nav className={`nav ${isMobileMenuOpen ? "open" : ""}`}>
-          <ul className="nav-links">
+        <nav aria-label="Main">
+          <ul className={`nav-links ${open ? "open" : ""}`}>
             <li>
-              <Link to="/" onClick={closeMobileMenu}>
+              <NavLink to="/" end onClick={close}>
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/features" onClick={closeMobileMenu}>
+              <NavLink to="/features" onClick={close}>
                 Features
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/about" onClick={closeMobileMenu}>
+              <NavLink to="/about" onClick={close}>
                 About
-              </Link>
+              </NavLink>
             </li>
-
-            {isAuthenticated && (
+            {user && (
               <li>
-                <Link to="/dashboard" onClick={closeMobileMenu}>
-                  Dashboard
-                </Link>
-              </li>
-            )}
-
-            {!isAuthenticated ? (
-              <li>
-                <button className="login-btn" onClick={onLogin}>
-                  Login
-                </button>
-              </li>
-            ) : (
-              <li>
-                <button
-                  className="logout-btn"
-                  onClick={() => {
-                    onLogout();
-                    closeMobileMenu(); // Ensure the menu closes on logout
-                  }}
-                >
-                  Logout
-                </button>
+                <NavLink to="/dashboard" onClick={close}>
+                  My tasks
+                </NavLink>
               </li>
             )}
           </ul>
         </nav>
 
-        {/* Mobile menu toggle */}
-        <div className="mobile-menu" onClick={toggleMobileMenu}>
-          <span className="menu-icon">&#9776;</span>
+        <div className="nav-actions">
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={theme === "dark" ? "Light mode" : "Dark mode"}
+          >
+            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+          </button>
+
+          {user ? (
+            <>
+              {user.photoURL ? (
+                <img className="avatar hide-sm" src={user.photoURL} alt="" referrerPolicy="no-referrer" />
+              ) : (
+                <span className="avatar hide-sm" aria-hidden="true">
+                  {initial}
+                </span>
+              )}
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  close();
+                  onLogout();
+                }}
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-sm"
+              onClick={() => {
+                close();
+                onLogin();
+              }}
+            >
+              Sign in
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="icon-btn menu-btn"
+            onClick={() => setOpen((o) => !o)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <CloseIcon /> : <MenuIcon />}
+          </button>
         </div>
       </div>
     </header>

@@ -1,98 +1,98 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./AboutPage.css"; // Importing the CSS for styling
+import { CodeIcon, ShieldIcon, SyncIcon, UserIcon, GithubIcon } from "./Icons";
 
-const AboutPage = ({ isAuthenticated, onLogin }) => {
-  const navigate = useNavigate(); // Use navigate to programmatically redirect
+const STACK = ["React 18", "React Router", "Firebase Authentication", "Cloud Firestore", "Notifications API", "Vercel"];
 
-  const handleGetStarted = () => {
-    if (isAuthenticated) {
-      // If user is authenticated, navigate to dashboard
-      navigate("/dashboard");
-    } else {
-      // If user is not authenticated, trigger the login modal
-      onLogin();
-    }
-  };
+const AboutPage = () => (
+  <>
+    <div className="container page-head">
+      <span className="eyebrow">About</span>
+      <h1 style={{ fontSize: "clamp(1.9rem, 4vw, 2.8rem)" }}>Built to keep things simple</h1>
+      <p>
+        TickTask is a lightweight task manager for anyone who wants a clear list, sensible
+        reminders and nothing in the way.
+      </p>
+    </div>
 
-  return (
-    <div className="about-page">
-      <div className="about-container">
-        <h1>About TickTask</h1>
-        <p className="intro-text">
-          TickTask is a powerful and easy-to-use task management app designed to
-          help you stay organized, boost productivity, and achieve your goals.
-          Whether you're managing daily to-do lists, work projects, or long-term
-          plans, TickTask provides the tools you need to stay on top of your
-          tasks.
-        </p>
-
-        <section className="mission-section">
-          <h2>Our Mission</h2>
-          <p>
-            Our mission at TickTask is to empower individuals and teams to be
-            more productive and organized. We believe that with the right tools,
-            anyone can accomplish their tasks efficiently and achieve greater
-            success. TickTask was built with simplicity and flexibility in mind,
-            allowing users to manage their tasks from anywhere, at any time.
+    <section style={{ paddingTop: "1rem" }}>
+      <div className="container split">
+        <article className="card">
+          <h2 style={{ fontSize: "1.4rem" }}>Why I built it</h2>
+          <p className="muted">
+            Most task apps try to do everything. I wanted one that does the basics well: capture a
+            task quickly, give it a date and a priority, get reminded, and tick it off. TickTask is
+            the result, and a project for practising modern React with a real-time cloud back-end.
           </p>
-        </section>
-
-        <section className="features-section">
-          <h2>Key Features</h2>
-          <ul>
+          <h3 style={{ marginTop: "1.6rem" }}>How it works</h3>
+          <ul className="stack-list">
             <li>
-              <strong>Task Management:</strong> Create, edit, and organize tasks
-              effortlessly.
+              <span className="tile sm violet">
+                <UserIcon />
+              </span>
+              <p>
+                <strong>Sign-in</strong> uses Firebase Authentication with Google, or an anonymous
+                guest account for trying it out.
+              </p>
             </li>
             <li>
-              <strong>Reminders & Notifications:</strong> Set reminders for
-              tasks and receive notifications so you never miss a deadline.
+              <span className="tile sm blue">
+                <SyncIcon />
+              </span>
+              <p>
+                <strong>Tasks</strong> live in Cloud Firestore and stream to the app in real time,
+                so changes appear instantly on every device.
+              </p>
             </li>
             <li>
-              <strong>Google Authentication:</strong> Sign in securely using
-              Google to access your tasks from anywhere.
-            </li>
-            <li>
-              <strong>Cross-Platform Access:</strong> Access your tasks on any
-              device, be it a desktop or mobile.
+              <span className="tile sm green">
+                <ShieldIcon />
+              </span>
+              <p>
+                <strong>Privacy:</strong> Firestore security rules allow each account to read and
+                write only its own tasks. TickTask does not sell or share data.
+              </p>
             </li>
           </ul>
-        </section>
+        </article>
 
-        <section className="community-section">
-          <h2>Join Our Community</h2>
-          <p>
-            At TickTask, we are passionate about building a strong,
-            collaborative community of users. Whether you're an individual user
-            or part of a team, TickTask is designed to grow with you. We
-            actively listen to user feedback and continuously improve our
-            platform to meet your needs.
+        <aside className="card">
+          <span className="tile pink">
+            <CodeIcon />
+          </span>
+          <h3 style={{ marginTop: "1rem" }}>Built with</h3>
+          <div className="chips" style={{ marginBottom: "1.4rem" }}>
+            {STACK.map((s) => (
+              <span className="chip" key={s}>
+                {s}
+              </span>
+            ))}
+          </div>
+          <h3>Developer</h3>
+          <p className="muted" style={{ fontSize: "0.92rem" }}>
+            Designed and built by Emmanuel Opoku-Adjei.
           </p>
-        </section>
-
-        <section className="security-section">
-          <h2>Security & Privacy</h2>
-          <p>
-            We take your security seriously. TickTask uses Google authentication
-            to ensure that your data is secure. Your information is stored
-            safely and is only accessible by you. We follow industry standards
-            to protect your data and privacy at all times.
-          </p>
-        </section>
-
-        <section className="get-started-section">
-          <h2>Get Started with TickTask</h2>
-          <p>
-            Ready to take control of your tasks and achieve more? Join the
-            TickTask community today and start organizing your life with ease.
-            Whether you're working on personal projects, managing a team, or
-            just trying to keep track of daily tasks, TickTask is here to help.
-          </p>
-        </section>
+          <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+            <a
+              className="btn btn-ghost btn-sm"
+              href="https://github.com/Chiefopoku/ticktask"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubIcon width="16" height="16" /> Source code
+            </a>
+            <a
+              className="btn btn-ghost btn-sm"
+              href="https://chiefopoku.github.io/portfolio/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Portfolio
+            </a>
+          </div>
+        </aside>
       </div>
-    </div>
-  );
-};
+    </section>
+  </>
+);
 
 export default AboutPage;

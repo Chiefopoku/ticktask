@@ -1,158 +1,109 @@
 # TickTask
 
-TickTask is a task management web application that allows users to create, manage, and track their tasks. It includes user authentication (via Google Sign-In) using Firebase and stores tasks in Firestore for real-time updates.
+**Live app:** https://ticktask-six.vercel.app/
+
+TickTask is a simple, fast task manager.
+
+- Add tasks with due dates, priorities and reminders.
+- Search, filter and sort them.
+- Track your progress.
+
+Everything syncs in real time with Firebase.
 
 ## Features
 
-- **User Authentication**: Google Sign-In powered by Firebase Authentication.
-- **Task Management**: Add, update, delete, and mark tasks as complete.
-- **Real-Time Updates**: Tasks are updated in real-time using Firestore.
-- **Responsive Design**: Works on both desktop and mobile devices.
-- **Theme Toggle**: Switch between dark mode and light mode.
+- **Sign-in:** Google sign-in, or try it instantly as a guest (Firebase Authentication).
+- **Tasks:** quick capture, inline rename (double-click), complete and delete, and clear all completed tasks.
+- **Due dates and priorities:** optional date and time, plus a High, Medium or Low priority. "Today" and "Overdue" are highlighted.
+- **Reminders:** a browser notification at the due time, or 15 minutes, 1 hour or 1 day before. These fire while the app is open.
+- **Search, filter and sort:** filter by all, active, done or overdue, and sort by due date, priority or newest.
+- **Dashboard stats:** total, done, due today, overdue, and a progress ring.
+- **Real-time sync:** tasks are stored in Cloud Firestore and update instantly across devices.
+- **Light and dark mode:** follows your system setting and remembers your choice.
+- **Responsive and accessible:** keyboard-friendly, with labelled controls and support for reduced motion.
 
-## Tech Stack
+## Tech stack
 
-- **Frontend**: React.js (JavaScript)
-- **Backend**: Firebase (Authentication, Firestore, Hosting)
-- **Styling**: CSS (custom styles)
-- **Authentication**: Firebase Authentication (Google Sign-In)
-- **Database**: Firestore (NoSQL real-time database)
+- React 18 and React Router 6 (Create React App)
+- Firebase Authentication (Google and anonymous sign-in)
+- Cloud Firestore
+- Plain CSS design system with CSS variables (`src/styles/global.css`)
+- Deployed on Vercel. `vercel.json` rewrites all routes to `index.html`, so deep links such as `/dashboard` work on refresh.
 
-## Screenshots
+## Project structure
 
-![TickTask Screenshot](path_to_screenshot)
+```
+src/
+  App.js                 routes, auth state, theme, login modal
+  firebase.js            Firebase initialisation (config from env vars)
+  styles/global.css      design system
+  components/
+    Header.js, Footer.js
+    LandingPage.js, FeaturesPage.js, AboutPage.js
+    Login.js             Google and guest sign-in
+    PrivateRoute.js      waits for auth before redirecting
+    Dashboard.js         stats, filters, search, sort, reminders
+    TaskInput.js, TaskList.js, TaskItem.js
+    taskUtils.js         date, priority and sorting helpers
+    Icons.js             inline SVG icons
+```
 
-## Getting Started
+## Getting started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
-### Prerequisites
-
-- **Node.js** and **npm**: Install from [nodejs.org](https://nodejs.org/)
-- **Firebase account**: Sign up for free at [Firebase Console](https://firebase.google.com/)
-
-### Installation
-
-1. **Clone the repository**:
+1. Clone the repo and install the dependencies:
 
    ```bash
    git clone https://github.com/Chiefopoku/ticktask.git
-   ```
-
-2. **Navigate to the project directory**:
-
-   ```bash
    cd ticktask
-   ```
-
-3. **Install dependencies**:
-
-   ```bash
    npm install
    ```
 
-4. **Set up Firebase**:
-
-   - Go to [Firebase Console](https://console.firebase.google.com/).
-   - Create a new Firebase project.
-   - Enable **Firestore** and **Authentication** (Google Sign-In).
-   - Create a `.env` file in the root of your project and add your Firebase configuration keys:
-
-     ```bash
-     REACT_APP_FIREBASE_API_KEY=your-api-key
-     REACT_APP_FIREBASE_AUTH_DOMAIN=your-auth-domain
-     REACT_APP_FIREBASE_PROJECT_ID=your-project-id
-     REACT_APP_FIREBASE_STORAGE_BUCKET=your-storage-bucket
-     REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
-     REACT_APP_FIREBASE_APP_ID=your-app-id
-     ```
-
-5. **Run the development server**:
+2. Create a Firebase project and enable **Authentication**, with the **Google** and **Anonymous** providers turned on.
+3. Enable **Cloud Firestore** in the same project.
+4. Add a `.env` file in the project root:
 
    ```bash
-   npm start
+   REACT_APP_FIREBASE_API_KEY=...
+   REACT_APP_FIREBASE_AUTH_DOMAIN=...
+   REACT_APP_FIREBASE_PROJECT_ID=...
+   REACT_APP_FIREBASE_STORAGE_BUCKET=...
+   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=...
+   REACT_APP_FIREBASE_APP_ID=...
    ```
 
-   The app will run locally on `http://localhost:3000`.
+5. Start the app with `npm start`. It opens at http://localhost:3000.
 
-## Usage
+## Firestore security rules
 
-1. **Sign in**: Click on the **Google Sign-In** button to authenticate.
-2. **Create a Task**: Use the input field to add new tasks.
-3. **Manage Tasks**: Mark tasks as complete, edit them, or delete them as needed.
-4. **Logout**: Sign out using the **Logout** button.
+These rules allow each signed-in user to read and write only their own tasks:
 
-## Firebase Security Rules
-
-Ensure that your Firestore database is secure by applying the following security rules in Firebase:
-
-```javascript
+```
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /tasks/{taskId} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
     }
   }
 }
 ```
 
-These rules ensure that only authenticated users can access and modify their own tasks.
+## Task document shape
 
-## Deployment
+```js
+{
+  name: "Submit report",
+  completed: false,
+  userId: "<firebase uid>",
+  createdAt: <server timestamp>,
+  dueDate: "2026-10-14" | null,
+  dueTime: "17:00" | null,
+  priority: "high" | "medium" | "low",
+  reminder: "<ISO datetime>" | null
+}
+```
 
-To deploy the application using Firebase Hosting, follow these steps:
+## Author
 
-1. **Build the app**:
-
-   ```bash
-   npm run build
-   ```
-
-2. **Install Firebase CLI**:
-
-   ```bash
-   npm install -g firebase-tools
-   ```
-
-3. **Login to Firebase**:
-
-   ```bash
-   firebase login
-   ```
-
-4. **Initialize Firebase in your project**:
-
-   ```bash
-   firebase init
-   ```
-
-   Select **Hosting** and use the **build/** folder as the public directory.
-
-5. **Deploy the app**:
-
-   ```bash
-   firebase deploy
-   ```
-
-The app will be deployed and hosted at `https://your-project-id.web.app/`.
-
-## Contributing
-
-If you'd like to contribute to **TickTask**, feel free to fork the repository and submit pull requests. All contributions are welcome!
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/your-feature-name`
-3. **Commit your changes**: `git commit -m "Add some feature"`
-4. **Push to the branch**: `git push origin feature/your-feature-name`
-5. **Open a pull request**
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Special thanks to [Firebase](https://firebase.google.com/) for providing easy-to-use backend services.
-- Inspired by the simplicity of task management tools like Todoist and Microsoft To Do.
-
----
+Built by [Emmanuel Opoku-Adjei](https://chiefopoku.github.io/portfolio/). MIT licence.

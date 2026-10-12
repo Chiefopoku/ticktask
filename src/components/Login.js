@@ -1,119 +1,117 @@
 import React, { useState } from "react";
+import { isMobile } from "react-device-detect";
 import {
   auth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   signInAnonymously,
-} from "../firebase"; // Firebase auth methods
-import { isMobile } from "react-device-detect"; // Mobile detection library
-import "./Login.css"; // CSS import
+} from "../firebase";
+import { LogoIcon, GoogleIcon, UserIcon, CloseIcon } from "./Icons";
 
-const Login = ({ onLogin, onClose }) => {
+const POPUP_FALLBACK = new Set([
+  "auth/popup-blocked",
+  "auth/operation-not-supported-in-this-environment",
+  "auth/web-storage-unsupported",
+]);
+
+const friendly = (code) => {
+  if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
+    return "Sign-in was cancelled.";
+  }
+  if (code === "auth/network-request-failed") return "Network error. Check your connection and try again.";
+  if (code === "auth/admin-restricted-operation") return "Guest access is currently disabled.";
+  return "Something went wrong signing you in. Please try again.";
+};
+
+const Login = ({ onSignedIn, onClose }) => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [busy, setBusy] = useState(null); // "google" | "guest" | null
 
-  // Google sign-in logic
-  const handleGoogleLogin = () => {
+  const handleGoogle = async () => {
+    setError(null);
+    setBusy("google");
     const provider = new GoogleAuthProvider();
-    provider.addScope("profile"); // Add profile scope
-    provider.addScope("email"); // Add email scope
-
-    setLoading(true); // Start loading
-
-    if (isMobile) {
-      // Use redirect for Google login on mobile
-      signInWithRedirect(auth, provider).catch((error) => {
-        setLoading(false); // Stop loading on error
-        setError("Failed to sign in with Google on mobile. Please try again.");
-        console.error("Mobile Google login error:", error);
-      });
-    } else {
-      // Use popup for Google login on desktop
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          console.log("Google Access Token:", token);
-          onLogin(user); // Log the user in
-          onClose(); // Close the modal after successful login
-        })
-        .catch((error) => {
-          setError("Failed to sign in with Google. Please try again.");
-          console.error("Desktop Google login error:", error);
-        })
-        .finally(() => {
-          setLoading(false); // Stop loading after process
-        });
+    provider.setCustomParameters({ prompt: "select_account" });
+    try {
+      if (isMobile) {
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+      await signInWithPopup(auth, provider);
+      onSignedIn();
+    } catch (err) {
+      if (POPUP_FALLBACK.has(err.code)) {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch (redirectErr) {
+          setError(friendly(redirectErr.code));
+          return;
+        }
+      }
+      setError(friendly(err.code));
+    } finally {
+      setBusy(null);
     }
   };
 
-  // Handle anonymous login
-  const handleAnonymousLogin = () => {
-    setLoading(true); // Start loading
-    signInAnonymously(auth)
-      .then((result) => {
-        onLogin(result.user); // Log the user in
-        onClose(); // Close the modal after successful login
-      })
-      .catch((error) => {
-        setError("Failed to sign in as guest. Please try again.");
-        console.error("Anonymous login error:", error);
-      })
-      .finally(() => {
-        setLoading(false); // Stop loading after process
-      });
+  const handleGuest = async () => {
+    setError(null);
+    setBusy("guest");
+    try {
+      await signInAnonymously(auth);
+      onSignedIn();
+    } catch (err) {
+      setError(friendly(err.code));
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
-    <div
-      className="login-modal-overlay"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="login-modal">
-        <button className="close-modal" onClick={onClose}>
-          &times;
+    <div className="card login-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      {onClose && (
+        <button type="button" className="icon-btn close" onClick={onClose} aria-label="Close">
+          <CloseIcon />
         </button>
-        <h1>Welcome to TickTask</h1>
-        <p className="login-description">
-          Manage your tasks efficiently with TickTask. Sign in to continue.
+      )}
+      <span className="brand-mark">
+        <LogoIcon />
+      </span>
+      <h2 id="login-title">Welcome to TickTask</h2>
+      <p>Sign in to plan your day and keep your tasks in sync.</p>
+
+      <button
+        type="button"
+        className="btn google-btn btn-block"
+        onClick={handleGoogle}
+        disabled={!!busy}
+      >
+        <GoogleIcon width="20" height="20" />
+        {busy === "google" ? "Signing in…" : "Continue with Google"}
+      </button>
+
+      <div className="divider">or</div>
+
+      <button
+        type="button"
+        className="btn btn-ghost btn-block"
+        onClick={handleGuest}
+        disabled={!!busy}
+      >
+        <UserIcon />
+        {busy === "guest" ? "Starting…" : "Try it as a guest"}
+      </button>
+
+      {error && (
+        <p className="error-text" role="alert">
+          {error}
         </p>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            {/* Google Sign-in Button */}
-            <button
-              className="login-button google-login"
-              onClick={handleGoogleLogin}
-            >
-              {/* Google Icon SVG */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 48 48"
-              >
-                {/* SVG paths */}
-              </svg>
-              Sign in with Google
-            </button>
-
-            {/* Anonymous Sign-in Button */}
-            <button
-              className="login-button anonymous-login"
-              onClick={handleAnonymousLogin}
-            >
-              Continue as Guest
-            </button>
-          </>
-        )}
-
-        {/* Error Message Display */}
-        {error && <p className="error-message">{error}</p>}
-      </div>
+      )}
+      <p className="fine">
+        Guest tasks are tied to this browser. Use Google to access your tasks on any device.
+      </p>
     </div>
   );
 };

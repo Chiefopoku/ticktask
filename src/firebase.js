@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase configuration from environment variables
+// Firebase configuration from environment variables (set these in Vercel → Settings → Environment Variables).
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -20,21 +20,43 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase app
-const app = initializeApp(firebaseConfig);
+let auth;
+let db;
+let firebaseReady = false;
 
-// Initialize Firebase Authentication and Firestore services
-const auth = getAuth(app); // Initialize Firebase Authentication
-const db = getFirestore(app); // Initialize Firestore
+try {
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+    throw new Error("Firebase environment variables are missing.");
+  }
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  firebaseReady = true;
+} catch (err) {
+  // Keep the public pages working even if Firebase isn't configured.
+  // eslint-disable-next-line no-console
+  console.warn("TickTask: Firebase is not configured, sign-in is disabled.", err.message);
+  auth = {
+    currentUser: null,
+    onAuthStateChanged: (cb) => {
+      setTimeout(() => cb(null), 0);
+      return () => {};
+    },
+    signOut: async () => {},
+  };
+  db = null;
+}
 
-// Export necessary Firebase services and methods
+const safeGetRedirectResult = (a) => (firebaseReady ? getRedirectResult(a) : Promise.resolve(null));
+
 export {
-  auth, // Firebase Auth instance
-  db, // Firestore instance
-  GoogleAuthProvider, // Google Auth provider
-  signInWithPopup, // Sign-in with popup method
-  signInWithRedirect, // Sign-in with redirect method
-  signInAnonymously, // Anonymous sign-in method
-  signInWithEmailAndPassword, // Sign-in with email and password method
-  getRedirectResult, // Handle redirect sign-in result
+  auth,
+  db,
+  firebaseReady,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  safeGetRedirectResult as getRedirectResult,
 };

@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signInAnonymously,
+  firebaseReady,
 } from "../firebase";
 import { LogoIcon, GoogleIcon, UserIcon, CloseIcon } from "./Icons";
 
@@ -28,7 +29,15 @@ const Login = ({ onSignedIn, onClose }) => {
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(null); // "google" | "guest" | null
 
+  const notConfigured = () => {
+    setError("Sign-in is temporarily unavailable. Please try again later.");
+  };
+
   const handleGoogle = async () => {
+    if (!firebaseReady) {
+      notConfigured();
+      return;
+    }
     setError(null);
     setBusy("google");
     const provider = new GoogleAuthProvider();
@@ -57,6 +66,10 @@ const Login = ({ onSignedIn, onClose }) => {
   };
 
   const handleGuest = async () => {
+    if (!firebaseReady) {
+      notConfigured();
+      return;
+    }
     setError(null);
     setBusy("guest");
     try {
